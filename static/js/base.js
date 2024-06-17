@@ -13,18 +13,19 @@ class SidebarToggle {
     toggleSidebar() {
         this.sidebar.classList.toggle('sidebar-collapsed');
         if (this.sidebar.classList.contains('sidebar-collapsed')) {
-            this.toggleButton.style.left = '10px';
-            this.container.style.marginLeft = '0';
+            this.toggleButton.style.left = '15px';
+            this.container.classList.add('content-expanded');
         } else {
-            this.toggleButton.style.left = '240px';
-            this.container.style.marginLeft = '0px';
+            this.toggleButton.style.left = '245px';
+            this.container.classList.remove('content-expanded');
         }
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+
+function initializeSidebarToggle() {
     new SidebarToggle('toggle-button', 'sidebar', 'content');
-});
+}
 
 function initializeChangePasswordTrigger() {
     const changePasswordLink = document.getElementById('changePasswordLink');

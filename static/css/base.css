@@ -87,10 +87,16 @@ main {
 }
 
 .sidebar {
+    background-color: #f9f9f9 !important;
+    color: #004494 !important;
     width: 280px;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
     transition: margin 0.3s;
-    margin-right: 15px;
     display: flex;
+    flex-direction: column;
 }
 
 .sidebar-collapsed {
@@ -99,16 +105,18 @@ main {
 
 .content {
     transition: margin 0.3s;
+    margin-left: 280px;
+    flex: 1;
 }
 
 .content-expanded {
-    margin-left: 0;
+    margin-left: 40px;
 }
 
 .toggle-button {
     position: fixed;
     top: 20px;
-    left: 240px;
+    left: 245px;
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -120,42 +128,21 @@ main {
     justify-content: center;
     cursor: pointer;
     transition: left 0.3s, background-color 0.3s, box-shadow 0.3s;
-}
-
-.sidebar {
-    background-color: #f9f9f9 !important;
-    color: #004494 !important; /* Darker color for text */
-    width: 280px;
-    transition: margin 0.3s;
-    margin-right: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar-collapsed {
-    margin-left: -280px;
-}
-
-.content {
-    transition: margin 0.3s;
-}
-
-.content-expanded {
-    margin-left: 0;
+    z-index: 1050;
 }
 
 .toggle-button:hover {
-    background-color: #004494; /* Darker blue on hover */
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Glow effect */
+    background-color: #004494;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
 .toggle-button:active {
-    background-color: #ddd; /* darker blue on active */
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Glow effect */
+    background-color: #ddd;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
 }
 
 .sidebar-collapsed + .toggle-button {
-    left: 0;
+    left: 15px;
 }
 
 .navbar-view {
@@ -163,52 +150,52 @@ main {
 }
 
 .sidebar a {
-    color: #6e8efb !important; /* Darker color for links */
-    text-decoration: none; /* Remove underline from links */
+    color: #6e8efb !important;
+    text-decoration: none;
 }
 
 .sidebar a:hover {
-    color: #004494 !important; /* Blue color for links on hover */
+    color: #004494 !important;
 }
 
 .sidebar .nav-icon,
 .sidebar .img-style {
-    width: 24px; /* Increased icon size */
-    height: 24px; /* Increased icon size */
+    width: 24px;
+    height: 24px;
     margin-bottom: 5px;
     margin-right: 10px;
-    filter: invert(34%) sepia(99%) saturate(7465%) hue-rotate(202deg) brightness(98%) contrast(105%); /* Blue color for icons */
+    filter: invert(34%) sepia(99%) saturate(7465%) hue-rotate(202deg) brightness(98%) contrast(105%);
 }
 
 .sidebar .nav-icon:hover,
 .sidebar .img-style:hover {
-    filter: invert(34%) sepia(99%) saturate(7465%) hue-rotate(202deg) brightness(85%) contrast(105%); /* Darker blue on hover */
+    filter: invert(34%) sepia(99%) saturate(7465%) hue-rotate(202deg) brightness(85%) contrast(105%);
 }
 
 .sidebar hr {
-    border-top: 1px solid #007bff; /* Blue color for divider */
+    border-top: 1px solid #007bff;
 }
 
 .sidebar .dropdown-toggle {
-    color: #004494 !important; /* Darker color for dropdown toggle */
+    color: #004494 !important;
 }
 
 .sidebar .dropdown-menu {
-    background-color: #f9f9f9; /* Match sidebar background */
+    background-color: #f9f9f9;
 }
 
 .sidebar .dropdown-item {
-    color: #004494 !important; /* Darker color for dropdown items */
+    color: #004494 !important;
 }
 
 .sidebar .dropdown-item:hover {
-    background-color: #e7e7e7; /* Light gray background on hover */
-    color: #6e8efb !important; /* Blue color on hover */
+    background-color: #e7e7e7;
+    color: #6e8efb !important;
 }
 
 .sidebar .logo {
-    width: 74px; /* Increased logo size */
-    height: 74px; /* Increased logo size */
+    width: 74px;
+    height: 74px;
     margin-bottom: 15px;
 }
 
@@ -224,4 +211,3 @@ main {
     text-align: center;
     margin-top: 10px;
 }
-
