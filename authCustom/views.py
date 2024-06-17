@@ -4,7 +4,9 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.contrib.auth import login, authenticate
-from .forms import SignInForm, UserRegistrationForm
+from django.contrib.auth import update_session_auth_hash
+from .forms import SignInForm, UserRegistrationForm, CustomPasswordChangeForm
+
 
 class CustomLoginView(LoginView):
     template_name = 'auth/login.html'
@@ -32,7 +34,12 @@ class CustomLoginView(LoginView):
         return JsonResponse({'success': True, 'redirect_url': redirect_url})
 
     def form_invalid(self, form):
-        errors = {field: list(errors) for field, errors in form.errors.items()}
+        errors = {
+            str(form.fields[field_name].label if field_name in form.fields and form.fields[
+                field_name].label else field_name):
+                [str(message) for message in error_messages]
+            for field_name, error_messages in form.errors.items()
+        }
         return JsonResponse({'success': False, 'errors': errors}, status=400)
 
 
@@ -58,5 +65,37 @@ class RegisterView(FormView):
         return JsonResponse({'success': True, 'redirect_url': redirect_url})
 
     def form_invalid(self, form):
-        errors = {field: list(errors) for field, errors in form.errors.items()}
+        errors = {
+            str(form.fields[field_name].label if field_name in form.fields and form.fields[
+                field_name].label else field_name):
+                [str(message) for message in error_messages]
+            for field_name, error_messages in form.errors.items()
+        }
         return JsonResponse({'success': False, 'errors': errors}, status=400)
+
+
+class CustomPasswordChangeView(FormView):
+    template_name = 'auth/edit_password.html'
+    form_class = CustomPasswordChangeForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+
+            return JsonResponse({'success': True, 'username': request.user.username})
+        else:
+            errors = {
+                str(form.fields[field_name].label if field_name in form.fields and form.fields[
+                    field_name].label else field_name):
+                    [str(message) for message in error_messages]
+                for field_name, error_messages in form.errors.items()
+            }
+
+            return JsonResponse({'success': False, 'errors': errors})

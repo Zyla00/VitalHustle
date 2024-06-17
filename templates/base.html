@@ -9,6 +9,8 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <link rel="stylesheet" href="{% static 'css/offcanvas_menu.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block css %}
     {% endblock %}
@@ -43,13 +45,13 @@
         <hr>
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-               id="user-{{ user.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+               data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="https://api.dicebear.com/8.x/pixel-art/svg?seed={{ user|default:" Anonymous" }}" alt=""
                      width="32" height="32" class="rounded-circle me-2 border border-dark">
-                <strong>{{ user.username }}</strong>
+                <div class="username text-shadow" id="username"><strong>{{ request.user.username }}</strong></div>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="#">Change password</a></li>
+                <li><a class="dropdown-item" id="changePasswordLink" href="#">Change password</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
@@ -72,7 +74,25 @@
         {% block content %}{% endblock %}
     </div>
 </main>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasElement" aria-labelledby="offcanvasElementLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasElementLabel"></h5>
+        <button type="button" class="btn-close offcanvas-btn-close text-reset" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+<script src="{% static 'js/utils/alert.js' %}"></script>
 <script src="{% static 'js/base.js' %}"></script>
+<script type="text/javascript">
+        window.addEventListener('load', () => {
+            window.alertManager = new AlertManager();
+            initializeChangePasswordTrigger();
+        })
+    </script>
 {% block script %}{% endblock %}
 </body>
 </html>

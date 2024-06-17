@@ -327,12 +327,12 @@
     <script src="{% static 'js/homepage.js' %}"></script>
     <script type="text/javascript">
         window.addEventListener('load', () => {
-            updateMoodRangeValue();
-            document.getElementById('moodRange').addEventListener('input', updateMoodRangeValue);
-            document.getElementById('moodRange').addEventListener('input', postMoodScale);
-            addHighlightEffect()
-            document.getElementById('addHighlightEffect').addEventListener('input', postMoodScale);
-            initializeSlider()
+            {#updateMoodRangeValue();#}
+{#            document.getElementById('moodRange').addEventListener('input', updateMoodRangeValue);#}
+{#            document.getElementById('moodRange').addEventListener('input', postMoodScale);#}
+{#            addHighlightEffect()#}
+{#            document.getElementById('addHighlightEffect').addEventListener('input', postMoodScale);#}
+{#            initializeSlider()#}
             {#saveNote()#}
         })
 
