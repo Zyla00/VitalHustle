@@ -1,0 +1,38 @@
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.pagination .page-item .page-link {
+    color: #007bff; /* Dostosuj kolor tekstu */
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff; /* Dostosuj kolor tła aktywnego linku */
+    border-color: #007bff; /* Dostosuj kolor obramowania aktywnego linku */
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #0056b3; /* Dostosuj kolor tła przy najechaniu */
+    color: #fff; /* Dostosuj kolor tekstu przy najechaniu */
+}
+
+.items-per-page {
+    display: flex;
+    gap: 0px;
+    appearance: none;
+}
+
+.items-per-page .card {
+    cursor: pointer;
+}
+
+.items-per-page .card:hover {
+    background-color: #e0e0e0;
+}
+.items-per-page .items-per-page,card .page-link:hover {
+    background-color: #0056b3; /* Dostosuj kolor tła przy najechaniu */
+    color: #fff; /* Dostosuj kolor tekstu przy najechaniu */
+}

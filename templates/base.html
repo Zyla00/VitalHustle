@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitalHustle</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block css %}
+    {% endblock %}
+<body>
+<main>
+    <div id="sidebar" class="d-flex flex-column flex-shrink-0 p-3 sidebar">
+        <div class="logo-container">
+            <img class="logo nav-icon" src="{% static 'img/vitalhustle_icon.svg' %}" alt="Icon">
+            <span class="fs-4">VitalHustle</span>
+        </div>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="{% url 'home-view' %}" class="nav-link active" aria-current="page">
+                    <img class="img-style nav-icon" src="{% static 'img/home_icon.svg' %}" alt="Icon">
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'cald-view' %}" class="nav-link text-white">
+                    <img class="img-style nav-icon" src="{% static 'img/calendar_icon.svg' %}" alt="Icon">
+                    Calendar
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'Statistics-view' %}" class="nav-link text-white">
+                    <img class="img-style nav-icon" src="{% static 'img/statistic_icon.svg' %}" alt="Icon">
+                    Statistics
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+               id="user-{{ user.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://api.dicebear.com/8.x/pixel-art/svg?seed={{ user|default:" Anonymous" }}" alt=""
+                     width="32" height="32" class="rounded-circle me-2 border border-dark">
+                <strong>{{ user.username }}</strong>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="#">Change password</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
+    <button id="toggle-button" class="toggle-button">&#9776;</button>
+    <div class="container content">
+        {% if messages %}
+            <div class="alert alert-dismissible" role="alert">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+</main>
+<script src="{% static 'js/base.js' %}"></script>
+{% block script %}{% endblock %}
+</body>
+</html>
