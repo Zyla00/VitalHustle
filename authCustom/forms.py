@@ -1,5 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 class SignInForm(AuthenticationForm):
@@ -21,3 +23,20 @@ class SignInForm(AuthenticationForm):
 
         return password
 
+
+class UserRegistrationForm(UserCreationForm):
+    email = forms.CharField(max_length=254, required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if '@' not in email:
+            raise ValidationError('Enter a valid email address.')
+        elif User.objects.filter(email=email).exists():
+            raise ValidationError('This email address is already in use.')
+
+        return email
