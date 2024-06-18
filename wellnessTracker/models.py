@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from multiselectfield import MultiSelectField
+from decimal import Decimal
 
 
 class Mood(models.Model):
     SCALE_CHOICES = [(i, str(i)) for i in range(0, 11)]
-    SCALE_CHOICES_HALF = [(i / 2, str(i / 2)) for i in range(0, 21)]
+    SCALE_CHOICES_HALF = [(Decimal(i) / 2, f'{Decimal(i) / 2:.1f}') for i in range(0, 49)]
 
     EMOTION_CHOICES = (
         ('happy', 'Happy'),
@@ -41,8 +42,8 @@ class Mood(models.Model):
 
     scale = models.IntegerField(choices=SCALE_CHOICES, default=0, blank=True, null=True,
                                 help_text='How user felt today')
-    slept_scale = models.IntegerField(choices=SCALE_CHOICES_HALF, default=0, blank=True, null=True,
-                                      help_text='How long user slept today')
+    slept_scale = models.FloatField(choices=SCALE_CHOICES_HALF, default=0, blank=True, null=True,
+                                    help_text='How long user slept today')
     emotions = MultiSelectField(choices=EMOTION_CHOICES, max_length=100, blank=True,
                                 help_text='Which emotions did user felt')
     note = models.TextField(blank=True, help_text='Custom user note')

@@ -7,7 +7,7 @@ class MoodForm(forms.ModelForm):
         fields = ['scale', 'slept_scale', 'emotions', 'note']
         widgets = {
             'scale': forms.NumberInput(attrs={'required': False}),
-            'slept_scale': forms.NumberInput(attrs={'required': False}),
+            'slept_scale': forms.NumberInput(attrs={'step': 0.5, 'min': 0, 'max': 24, 'required': False}),
             'emotions': forms.SelectMultiple(attrs={'required': False}),
             'note': forms.Textarea(attrs={'required': False}),
         }
