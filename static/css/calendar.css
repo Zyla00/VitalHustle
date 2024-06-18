@@ -1,38 +1,28 @@
-.pagination-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
+.tile {
+    max-width: 100%; /* Full width within its column */
+    padding: 10px; /* Reduced padding */
+    background-color: #ffffff; /* White background */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-.pagination .page-item .page-link {
-    color: #007bff; /* Dostosuj kolor tekstu */
+.tile h2, .tile h3, .tile h5 {
+    font-size: 1.1rem; /* Reduced font size */
+    margin-bottom: 0.5rem; /* Reduced margin bottom */
 }
-
-.pagination .page-item.active .page-link {
-    background-color: #007bff; /* Dostosuj kolor tła aktywnego linku */
-    border-color: #007bff; /* Dostosuj kolor obramowania aktywnego linku */
+.tile h2 {
+    font-size: 1.3rem; /* Slightly larger font size for h2 */
 }
-
-.pagination .page-item .page-link:hover {
-    background-color: #0056b3; /* Dostosuj kolor tła przy najechaniu */
-    color: #fff; /* Dostosuj kolor tekstu przy najechaniu */
+.tile .badge {
+    margin-right: 3px; /* Reduced margin-right */
 }
-
-.items-per-page {
-    display: flex;
-    gap: 0px;
-    appearance: none;
+.tile strong {
+    color: #343a40; /* Darker color for strong elements for better readability */
 }
-
-.items-per-page .card {
-    cursor: pointer;
+.tile hr {
+    border-top: 1px solid #dee2e6;
+    margin-top: 0.5rem; /* Reduced margin top */
+    margin-bottom: 0.5rem; /* Reduced margin bottom */
 }
-
-.items-per-page .card:hover {
-    background-color: #e0e0e0;
-}
-.items-per-page .items-per-page,card .page-link:hover {
-    background-color: #0056b3; /* Dostosuj kolor tła przy najechaniu */
-    color: #fff; /* Dostosuj kolor tekstu przy najechaniu */
+.tile .mb-2 {
+    margin-bottom: 0.5rem; /* Reduced margin bottom */
 }

@@ -10,47 +10,56 @@
 {% endblock %}
 
 {% block content %}
+    <div class="container my-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 d-flex flex-wrap">
+        {% for day in days %}
+            <div class="col d-flex flex-column">
+                <div class="tile flex-grow-1 d-flex flex-column">
+                        <h2><strong>Date:</strong> {{ day.date }}</h2>
+                        <hr>
+                
+                        <h3><strong>Mood:</strong> {{ day.mood.scale }}</h3>
+                        <div class="mb-2">
+                            <strong>Emotions:</strong>
+                            {% for emotion in day.mood.emotions %}
+                                <span class="badge bg-primary">{{ emotion }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-2">
+                            <strong>Note:</strong> {{ day.mood.note }}
+                        </div>
+                        <h3><strong>Sleep:</strong> {{ day.mood.slept_scale }}h</h3>
+                        <hr>
 
-    <div class="container">
-        <div class="pagination-container">
-            <div class="items-per-page">
-                <div class="card" style="width: 5rem;">
-                    <div class="card-body text-center">
-                        <a class="card-link" href="?items=10">10</a>
-                    </div>
-                </div>
-                <div class="card" style="width: 5rem;">
-                    <div class="card-body text-center">
-                        <a class="card-link" href="?items=20">20</a>
-                    </div>
-                </div>
-                <div class="card" style="width: 5rem;">
-                    <div class="card-body text-center">
-                        <a class="card-link" href="?items=50">50</a>
-                    </div>
-                </div>
-            </div>
+                        <h5><strong>Coffee</strong> - {{ day.habit.coffee_amount }} {{ day.habit.coffee_unit }}</h5>
+                        <hr>
 
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                        <h5><strong>Cigarettes</strong> - {{ day.habit.cigarettes }}: {{ day.habit.cigarette_type }}
+                        </h5>
+                        <hr>
+
+                        <h5><strong>Alcohol</strong> - {{ day.habit.alcohol_amount }} {{ day.habit.alcohol_unit }}</h5>
+                        <div class="mb-2">
+                            <strong>Type:</strong>
+                            {% for alcohol in day.habit.alcohol_type %}
+                                <span class="badge bg-secondary">{{ alcohol }}</span>
+                            {% endfor %}
+                        </div>
+                        <hr>
+
+                        <h5><strong>Exercise</strong> - {{ day.habit.exercise_minutes }} {{ day.habit.exercise_unit }}
+                        </h5>
+                        <div class="mb-2">
+                            <strong>Type:</strong>
+                            {% for exercise in day.habit.exercise_type %}
+                                <span class="badge bg-success">{{ exercise }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
-
 {% endblock %}
 
 {% block script %}
@@ -60,6 +69,5 @@
         window.addEventListener('load', () => {
 
         })
-
     </script>
 {% endblock %}
