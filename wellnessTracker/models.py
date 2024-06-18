@@ -5,6 +5,7 @@ from multiselectfield import MultiSelectField
 
 class Mood(models.Model):
     SCALE_CHOICES = [(i, str(i)) for i in range(0, 11)]
+    SCALE_CHOICES_HALF = [(i / 2, str(i / 2)) for i in range(0, 21)]
 
     EMOTION_CHOICES = (
         ('happy', 'Happy'),
@@ -38,15 +39,18 @@ class Mood(models.Model):
         ('hopeful', 'Hopeful'),
     )
 
-    scale = models.IntegerField(choices=SCALE_CHOICES, default=0,  help_text='How user felt today')
-    slept_scale = models.IntegerField(choices=SCALE_CHOICES, default=0, help_text='How long user slept today')
-    emotions = MultiSelectField(choices=EMOTION_CHOICES, max_length=100, help_text='Which emotions did user felt')
-    note = models.TextField(help_text='Custom user note')
+    scale = models.IntegerField(choices=SCALE_CHOICES, default=0, blank=True, null=True,
+                                help_text='How user felt today')
+    slept_scale = models.IntegerField(choices=SCALE_CHOICES_HALF, default=0, blank=True, null=True,
+                                      help_text='How long user slept today')
+    emotions = MultiSelectField(choices=EMOTION_CHOICES, max_length=100, blank=True,
+                                help_text='Which emotions did user felt')
+    note = models.TextField(blank=True, help_text='Custom user note')
     updated_at = models.DateTimeField(auto_now=True, help_text='Time when the interface was last updated')
 
 
 class Habit(models.Model):
-    COFFEE_CHOICES = [(i, str(i)) for i in range(0, 1001, 1)]  # Example: [0, 50, 100, ..., 1000]
+    COFFEE_CHOICES = [(i, str(i)) for i in range(0, 1001, 1)]
     UNIT_CHOICES = [
         ('ml', 'ml'),
         ('l', 'l')
@@ -55,6 +59,7 @@ class Habit(models.Model):
         ('minutes', 'minutes'),
         ('hours', 'hours')
     ]
+
     CIGARETTE_CHOICES = [
         ('choose-type', 'Choose type'),
         ('full-flavor', 'Full Flavor'),
@@ -70,6 +75,7 @@ class Habit(models.Model):
         ('organic', 'Organic'),
         ('other', 'Other')
     ]
+
     ALCOHOL_CHOICES = [
         ('beer', 'Beer'),
         ('wine', 'Wine'),
@@ -149,32 +155,31 @@ class Habit(models.Model):
         ('bouldering', 'Bouldering')
     ]
 
-    # Field for number of coffees in milliliters
-    coffee_amount = models.PositiveIntegerField("How much coffee did you drink?", default=0)
-    coffee_unit = models.CharField("Unit of coffee", max_length=2, choices=UNIT_CHOICES, default='ml')
-
-    # Field for number of cigarettes and type
-    cigarettes = models.PositiveIntegerField("How many cigarettes did you smoke?", default=0)
+    coffee_amount = models.PositiveIntegerField("How much coffee did you drink?", default=0, blank=True, null=True)
+    coffee_unit = models.CharField("Unit of coffee", max_length=2, choices=UNIT_CHOICES, default='ml', blank=True,
+                                   null=True)
+    cigarettes = models.PositiveIntegerField("How many cigarettes did you smoke?", default=0, blank=True, null=True)
     cigarette_type = models.CharField("Type of cigarette", max_length=20, choices=CIGARETTE_CHOICES, blank=True)
-
-    # Field for amount of alcohol and type
-    alcohol_amount = models.PositiveIntegerField("Did you drink any alcohol? (amount)", default=0)
-    alcohol_unit = models.CharField("Unit of alcohol", max_length=2, choices=UNIT_CHOICES, default='ml')
+    alcohol_amount = models.PositiveIntegerField("Did you drink any alcohol? (amount)", default=0, blank=True,
+                                                 null=True)
+    alcohol_unit = models.CharField("Unit of alcohol", max_length=2, choices=UNIT_CHOICES, default='ml', blank=True,
+                                    null=True)
     alcohol_type = MultiSelectField("Type of alcohol", max_length=20, choices=ALCOHOL_CHOICES, blank=True)
-
-    # Field for duration of exercise in minutes and type of sport
-    exercise_minutes = models.PositiveIntegerField("How long did you exercise?", default=0)
-    exercise_unit = models.CharField("Unit of sports", max_length=8, choices=UNIT_SPORTS, default='minutes')
+    exercise_minutes = models.PositiveIntegerField("How long did you exercise?", default=0, blank=True, null=True)
+    exercise_unit = models.CharField("Unit of sports", max_length=8, choices=UNIT_SPORTS, default='minutes', blank=True,
+                                     null=True)
     exercise_type = MultiSelectField("Type of exercise", max_length=20, choices=SPORTS_CHOICES, blank=True)
-
     updated_at = models.DateTimeField(auto_now=True, help_text='Time when the interface was last updated')
 
 
 class Day(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)  # Replace 1 with the actual default User ID
-    mood = models.ForeignKey(Mood, on_delete=models.CASCADE, default=1)  # Replace 1 with the actual default Mood ID
-    habit = models.ForeignKey(Habit, on_delete=models.CASCADE, default=1)  # Replace 1 with the actual default Habit ID
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mood = models.ForeignKey(Mood, on_delete=models.CASCADE)
+    habit = models.ForeignKey(Habit, on_delete=models.CASCADE)
     date = models.DateField()
     updated_at = models.DateTimeField(auto_now=True, help_text='Time when the interface was last updated')
 
-
+    def delete(self, *args, **kwargs):
+        self.mood.delete()
+        self.habit.delete()
+        super().delete(*args, **kwargs)

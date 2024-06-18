@@ -1,36 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize select2
-    $('#multiple-select-optgroup-field-2').select2({
-        theme: "bootstrap-5",
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        closeOnSelect: false,
-    });
-
-    $('#multiple-select-optgroup-field-3').select2({
-        theme: "bootstrap-5",
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        closeOnSelect: false,
-    });
-
-    $('#multiple-select-optgroup-field-4').select2({
-        theme: "bootstrap-5",
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        closeOnSelect: false,
-    });
-
-    // Add highlight effect to tiles
-    addHighlightEffect();
-
-    // Initialize sliders
-    initializeSlider('moodRange', 'moodRangeValue','coffeeRange');
-    initializeSlider('sleepRange', 'sleepRangeValue', 'coffeeRangeValue');
-});
-
-
-// Function to add highlight effect to tiles
 function addHighlightEffect() {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach(tile => {
@@ -95,4 +62,43 @@ if (percentage < 50) {
 
 
     rangeInput.style.setProperty('--slider-before-color', color);
+}
+
+function initializeFormAutoSubmit() {
+    const forms = document.querySelectorAll('.form-container form');
+
+    forms.forEach(form => {
+        const saveButton = form.querySelector('button[type="submit"]');
+        if (!saveButton) {
+            form.addEventListener('input', (event) => {
+                event.preventDefault();
+                autoSubmitForm(form);
+            });
+        }
+    });
+}
+
+function autoSubmitForm(form) {
+    const formData = new FormData(form);
+    formData.append('form_id', form.id);
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Form submitted successfully');
+        } else {
+            console.log('Form submission failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }

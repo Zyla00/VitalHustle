@@ -4,82 +4,56 @@
     {{ block.super }}
     {% load static %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css"/>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"/>
     <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 {% endblock %}
 
 {% block content %}
     <div class="content-holder d-flex flex-wrap gap-3">
         <div class="tile form-container" id="addHighlightEffect">
-            <form method="post">
+            <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
+                <input type="hidden" name="form_id" value="mood-form">
                 <h3 class="form-title">How was today?</h3>
                 <div class="range-container">
                     <input class="slider" type="range" class="form-range" min="0" max="10" step="1" id="moodRange"
-                           value="0"
-                           name="moodScale">
-                    <div class="range-value" id="moodRangeValue"></div>
+                           value="{{ mood_form.instance.scale }}" name="scale">
+                    <div class="range-value" id="moodRangeValue">{{ mood_form.instance.scale }}</div>
                 </div>
             </form>
         </div>
         <div class="tile form-container" id="addHighlightEffect">
-            <form method="post">
+            <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
+                <input type="hidden" name="form_id" value="mood-form">
                 <h3 class="form-title">How many hours did you sleep?</h3>
                 <div class="range-container">
                     <input class="slider" type="range" class="form-range slider" min="0" max="24" step="0.5"
-                           id="sleepRange" value="0" name="sleepScale">
-                    <div class="range-value" id="sleepRangeValue"></div>
+                           id="sleepRange" value="{{ mood_form.instance.slept_scale }}" name="slept_scale">
+                    <div class="range-value" id="sleepRangeValue">{{ mood_form.instance.slept_scale }}</div>
                 </div>
             </form>
         </div>
         <div class="tile form-container">
-            <form method="post">
+            <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
+                <input type="hidden" name="form_id" value="mood-form">
                 <h3 class="form-title">Which emotions did you feel?</h3>
                 <select class="form-select" id="multiple-select-optgroup-field-2"
-                        data-placeholder="Choose emotions" name="moodEmotions"
-                        multiple>
-                    <option value="happy">Happy</option>
-                    <option value="sad">Sad</option>
-                    <option value="angry">Angry</option>
-                    <option value="excited">Excited</option>
-                    <option value="nervous">Nervous</option>
-                    <option value="scared">Scared</option>
-                    <option value="relaxed">Relaxed</option>
-                    <option value="bored">Bored</option>
-                    <option value="content">Content</option>
-                    <option value="curious">Curious</option>
-                    <option value="anxious">Anxious</option>
-                    <option value="confused">Confused</option>
-                    <option value="surprised">Surprised</option>
-                    <option value="grateful">Grateful</option>
-                    <option value="frustrated">Frustrated</option>
-                    <option value="hopeful">Hopeful</option>
-                    <option value="jealous">Jealous</option>
-                    <option value="lonely">Lonely</option>
-                    <option value="proud">Proud</option>
-                    <option value="ashamed">Ashamed</option>
-                    <option value="guilty">Guilty</option>
-                    <option value="embarrassed">Embarrassed</option>
-                    <option value="disappointed">Disappointed</option>
-                    <option value="inspired">Inspired</option>
-                    <option value="amused">Amused</option>
-                    <option value="sympathetic">Sympathetic</option>
-                    <option value="thoughtful">Thoughtful</option>
-                    <option value="energetic">Energetic</option>
-                    <option value="overwhelmed">Overwhelmed</option>
-                    <option value="hopeful">Hopeful</option>
+                        data-placeholder="Choose emotions" name="emotions" multiple>
+                    {% for emotion in mood_form.fields.emotions.choices %}
+                        <option value="{{ emotion.0 }}" {% if emotion.0 in mood_form.instance.emotions %}selected{% endif %}>{{ emotion.1 }}</option>
+                    {% endfor %}
                 </select>
             </form>
         </div>
         <div class="tile form-container">
-            <form method="post">
+            <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
-                <h3 class="form-title">Wanna add something more?</h3>
-                <textarea name="moodNote" class="note-input form-control"
-                          placeholder="Give a few details about today..."></textarea>
+                <input type="hidden" name="form_id" value="mood-form">
+                <h3 class="form-title">Would you like to add something more?</h3>
+                <textarea name="note" class="note-input form-control"
+                          placeholder="Give a few details about today...">{{ mood_form.instance.note }}</textarea>
                 <button class="save-button" type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
@@ -87,229 +61,133 @@
     <div class="block-2">
         <div class="content-holder d-flex flex-wrap gap-3">
             <div class="tile form-container" id="addHighlightEffect">
-                <form method="post" class="coffee-style-form">
+                <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="habit-form">
                     {% csrf_token %}
+                    <input type="hidden" name="form_id" value="habit-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
                                 <h3 class="form-title">How many coffees did you drink?</h3>
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="value" placeholder="Add value">
+                                                   name="coffee_amount" placeholder="Add value" min="0" value="{{ habit_form.instance.coffee_amount }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="coffee-style-select" id="unitSelect" name="unit"
-                                                    placeholder="Add value">
-                                                <option value="ml">ml</option>
-                                                <option value="l">l</option>
+                                            <select class="coffee-style-select" id="unitSelect" name="coffee_unit">
+                                                <option value="ml" {% if habit_form.instance.coffee_unit == "ml" %}selected{% endif %}>ml</option>
+                                                <option value="l" {% if habit_form.instance.coffee_unit == "l" %}selected{% endif %}>l</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </form>
-
             </div>
             <div class="tile form-container" id="addHighlightEffect">
-                <form method="post" class="coffee-style-form">
+                <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="cigarettes-form">
                     {% csrf_token %}
+                    <input type="hidden" name="form_id" value="habit-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
-                                <h3 class="form-title">How many cigaretes did you smoked?</h3>
-
+                                <h3 class="form-title">How many cigarettes did you smoke?</h3>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="value" placeholder="Add value">
+                                                   name="cigarettes" placeholder="Add value" min="0" value="{{ habit_form.instance.cigarettes }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="coffee-style-select" id="unitSelect" name="unit"
-                                                    placeholder="Add value">
-                                                <option value="choose-type">Choose type</option>
-                                                <option value="full-flavor">Full Flavor</option>
-                                                <option value="light">Light</option>
-                                                <option value="ultra-light">Ultra Light</option>
-                                                <option value="menthol">Menthol</option>
-                                                <option value="flavored">Flavored</option>
-                                                <option value="heated-tobacco">Heated Tobacco Products (HTP)</option>
-                                                <option value="e-cigarette">E-Cigarette (Electronic Cigarette)</option>
-                                                <option value="roll-your-own">Roll-Your-Own</option>
-                                                <option value="nicotine-free">Nicotine-Free</option>
-                                                <option value="premium">Premium</option>
-                                                <option value="organic">Organic</option>
-                                                <option value="other">Other</option>
-
+                                            <select class="coffee-style-select" id="unitSelect" name="cigarette_type">
+                                                {% for type in habit_form.fields.cigarette_type.choices %}
+                                                    <option value="{{ type.0 }}" {% if type.0 == habit_form.instance.cigarette_type %}selected{% endif %}>{{ type.1 }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="tile form-container">
-                <form method="post" class="coffee-style-form">
+                <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="alcohol-form">
                     {% csrf_token %}
+                    <input type="hidden" name="form_id" value="habit-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
                                 <h3 class="form-title">Did you drink any alcohol?</h3>
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="value" placeholder="How much?">
+                                                   name="alcohol_amount" min="0" value="{{ habit_form.instance.alcohol_amount }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="coffee-style-select" id="unitSelect" name="unit"
-                                                    placeholder="Add value">
-                                                <option value="ml">ml</option>
-                                                <option value="l">l</option>
-
+                                            <select class="coffee-style-select" id="unitSelect" name="alcohol_unit">
+                                                <option value="ml" {% if habit_form.instance.alcohol_unit == "ml" %}selected{% endif %}>ml</option>
+                                                <option value="l" {% if habit_form.instance.alcohol_unit == "l" %}selected{% endif %}>l</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="choose-gap">
-                                        <select class="form-select" id="multiple-select-optgroup-field-3"
-                                                data-placeholder="Choose alkohols"
-                                                multiple>
-                                            <option value="beer">Beer</option>
-                                            <option value="wine">Wine</option>
-                                            <option value="vodka">Vodka</option>
-                                            <option value="whiskey">Whiskey</option>
-                                            <option value="rum">Rum</option>
-                                            <option value="tequila">Tequila</option>
-                                            <option value="gin">Gin</option>
-                                            <option value="brandy">Brandy</option>
-                                            <option value="champagne">Champagne</option>
-                                            <option value="cider">Cider</option>
-                                            <option value="absinthe">Absinthe</option>
-                                            <option value="liqueur">Liqueur</option>
-                                            <option value="sake">Sake</option>
-                                            <option value="vermouth">Vermouth</option>
-                                            <option value="mead">Mead</option>
-                                            <option value="sherry">Sherry</option>
-                                            <option value="port">Port</option>
-                                            <option value="cocktail">Cocktail</option>
-                                            <option value="schnapps">Schnapps</option>
-                                            <option value="perry">Perry</option>
-                                            <option value="moonshine">Moonshine</option>
-                                            <option value="armagnac">Armagnac</option>
-                                            <option value="calvados">Calvados</option>
-                                            <option value="grappa">Grappa</option>
-                                            <option value="aquavit">Aquavit</option>
-                                            <option value="baijiu">Baijiu</option>
-                                            <option value="ouzo">Ouzo</option>
-                                            <option value="rakia">Rakia</option>
-                                            <option value="tequila-sunrise">Tequila Sunrise</option>
-                                            <option value="martini">Martini</option>
-                                            <option value="manhattan">Manhattan</option>
-                                            <option value="margarita">Margarita</option>
-                                            <option value="mojito">Mojito</option>
-                                            <option value="bloody-mary">Bloody Mary</option>
-                                            <option value="pina-colada">Piña Colada</option>
-                                            <option value="cosmopolitan">Cosmopolitan</option>
-                                            <option value="old-fashioned">Old Fashioned</option>
-
+                                        <select class="form-select" id="multiple-select-optgroup-field-3" name="alcohol_type" multiple>
+                                            {% for alcohol in habit_form.fields.alcohol_type.choices %}
+                                                <option value="{{ alcohol.0 }}" {% if alcohol.0 in habit_form.instance.alcohol_type %}selected{% endif %}>{{ alcohol.1 }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="tile form-container">
-                <form method="post" class="coffee-style-form">
+                <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="exercise-form">
                     {% csrf_token %}
+                    <input type="hidden" name="form_id" value="habit-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
                                 <h3 class="form-title">Were you active and did you exercise?</h3>
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="value" placeholder="How long?">
+                                                   name="exercise_minutes" min="0" value="{{ habit_form.instance.exercise_minutes }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select class="coffee-style-select" id="unitSelect" name="unit"
-                                                    placeholder="Add value">
-                                                <option value="minutes">minutes</option>
-                                                <option value="hours">hours</option>
-
+                                            <select class="coffee-style-select" id="unitSelect" name="exercise_unit">
+                                                <option value="minutes" {% if habit_form.instance.exercise_unit == "minutes" %}selected{% endif %}>minutes</option>
+                                                <option value="hours" {% if habit_form.instance.exercise_unit == "hours" %}selected{% endif %}>hours</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="choose-gap">
                                         <select class="choose-gap" class="form-select"
                                                 id="multiple-select-optgroup-field-4"
-                                                data-placeholder="Choose sports"
-                                                multiple>
-                                            <option value="gym">Gym</option>
-                                            <option value="running">Running</option>
-                                            <option value="cycling">Cycling</option>
-                                            <option value="swimming">Swimming</option>
-                                            <option value="basketball">Basketball</option>
-                                            <option value="soccer">Soccer</option>
-                                            <option value="tennis">Tennis</option>
-                                            <option value="yoga">Yoga</option>
-                                            <option value="pilates">Pilates</option>
-                                            <option value="hiking">Hiking</option>
-                                            <option value="climbing">Climbing</option>
-                                            <option value="dancing">Dancing</option>
-                                            <option value="boxing">Boxing</option>
-                                            <option value="martial-arts">Martial Arts</option>
-                                            <option value="weightlifting">Weightlifting</option>
-                                            <option value="crossfit">CrossFit</option>
-                                            <option value="aerobics">Aerobics</option>
-                                            <option value="rowing">Rowing</option>
-                                            <option value="skiing">Skiing</option>
-                                            <option value="snowboarding">Snowboarding</option>
-                                            <option value="skating">Skating</option>
-                                            <option value="surfing">Surfing</option>
-                                            <option value="kayaking">Kayaking</option>
-                                            <option value="golf">Golf</option>
-                                            <option value="cricket">Cricket</option>
-                                            <option value="rugby">Rugby</option>
-                                            <option value="baseball">Baseball</option>
-                                            <option value="volleyball">Volleyball</option>
-                                            <option value="badminton">Badminton</option>
-                                            <option value="table-tennis">Table Tennis</option>
-                                            <option value="archery">Archery</option>
-                                            <option value="fencing">Fencing</option>
-                                            <option value="horse-riding">Horse Riding</option>
-                                            <option value="gymnastics">Gymnastics</option>
-                                            <option value="triathlon">Triathlon</option>
-                                            <option value="bouldering">Bouldering</option>
-
+                                                name="exercise_type" multiple>
+                                            {% for exercise in habit_form.fields.exercise_type.choices %}
+                                                <option value="{{ exercise.0 }}" {% if exercise.0 in habit_form.instance.exercise_type %}selected{% endif %}>{{ exercise.1 }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -317,7 +195,6 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block script %}
@@ -327,12 +204,34 @@
     <script src="{% static 'js/homepage.js' %}"></script>
     <script type="text/javascript">
         window.addEventListener('load', () => {
+            initializeFormAutoSubmit();
+            addHighlightEffect();
+            initializeSlider('moodRange', 'moodRangeValue', 'coffeeRange');
+            initializeSlider('sleepRange', 'sleepRangeValue', 'coffeeRangeValue');
+            $('#multiple-select-optgroup-field-2').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                closeOnSelect: false,
+            });
+            $('#multiple-select-optgroup-field-3').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                closeOnSelect: false,
+            });
+            $('#multiple-select-optgroup-field-4').select2({
+                theme: "bootstrap-5",
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                closeOnSelect: false,
+            });
             {#updateMoodRangeValue();#}
-{#            document.getElementById('moodRange').addEventListener('input', updateMoodRangeValue);#}
-{#            document.getElementById('moodRange').addEventListener('input', postMoodScale);#}
-{#            addHighlightEffect()#}
-{#            document.getElementById('addHighlightEffect').addEventListener('input', postMoodScale);#}
-{#            initializeSlider()#}
+            {#            document.getElementById('moodRange').addEventListener('input', updateMoodRangeValue);#}
+            {#            document.getElementById('moodRange').addEventListener('input', postMoodScale);#}
+            {#            addHighlightEffect()#}
+            {#            document.getElementById('addHighlightEffect').addEventListener('input', postMoodScale);#}
+            {#            initializeSlider()#}
             {#saveNote()#}
         })
 
