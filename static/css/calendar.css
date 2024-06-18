@@ -1,28 +1,32 @@
 .tile {
-    max-width: 100%; /* Full width within its column */
-    padding: 10px; /* Reduced padding */
-    background-color: #ffffff; /* White background */
+    max-width: 100%;
+    padding: 10px;
+    background-color: #ffffff;
     border-radius: 0.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .tile h2, .tile h3, .tile h5 {
-    font-size: 1.1rem; /* Reduced font size */
-    margin-bottom: 0.5rem; /* Reduced margin bottom */
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
 }
 .tile h2 {
-    font-size: 1.3rem; /* Slightly larger font size for h2 */
+    font-size: 1.3rem;
 }
 .tile .badge {
-    margin-right: 3px; /* Reduced margin-right */
+    margin-right: 3px;
 }
 .tile strong {
-    color: #343a40; /* Darker color for strong elements for better readability */
+    color: #343a40;
 }
 .tile hr {
     border-top: 1px solid #dee2e6;
-    margin-top: 0.5rem; /* Reduced margin top */
-    margin-bottom: 0.5rem; /* Reduced margin bottom */
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 .tile .mb-2 {
-    margin-bottom: 0.5rem; /* Reduced margin bottom */
+    margin-bottom: 0.5rem;
+}
+
+.pagination {
+    margin-top: 20px;
 }

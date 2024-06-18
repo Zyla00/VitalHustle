@@ -12,12 +12,12 @@
 {% block content %}
     <div class="container my-4">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 d-flex flex-wrap">
-        {% for day in days %}
-            <div class="col d-flex flex-column">
-                <div class="tile flex-grow-1 d-flex flex-column">
+            {% for day in days %}
+                <div class="col d-flex flex-column">
+                    <div class="tile flex-grow-1 d-flex flex-column">
                         <h2><strong>Date:</strong> {{ day.date }}</h2>
                         <hr>
-                
+
                         <h3><strong>Mood:</strong> {{ day.mood.scale }}</h3>
                         <div class="mb-2">
                             <strong>Emotions:</strong>
@@ -31,14 +31,13 @@
                         <h3><strong>Sleep:</strong> {{ day.mood.slept_scale }}h</h3>
                         <hr>
 
-                        <h5><strong>Coffee</strong> - {{ day.habit.coffee_amount }} {{ day.habit.coffee_unit }}</h5>
+                        <h5><strong>Coffee</strong>  {{ day.habit.coffee_amount }} {{ day.habit.coffee_unit }}</h5>
                         <hr>
 
-                        <h5><strong>Cigarettes</strong> - {{ day.habit.cigarettes }}: {{ day.habit.cigarette_type }}
-                        </h5>
+                        <h5><strong>Cigarettes</strong>  {{ day.habit.cigarettes }}: {{ day.habit.cigarette_type }}</h5>
                         <hr>
 
-                        <h5><strong>Alcohol</strong> - {{ day.habit.alcohol_amount }} {{ day.habit.alcohol_unit }}</h5>
+                        <h5><strong>Alcohol</strong>  {{ day.habit.alcohol_amount }} {{ day.habit.alcohol_unit }}</h5>
                         <div class="mb-2">
                             <strong>Type:</strong>
                             {% for alcohol in day.habit.alcohol_type %}
@@ -47,8 +46,7 @@
                         </div>
                         <hr>
 
-                        <h5><strong>Exercise</strong> - {{ day.habit.exercise_minutes }} {{ day.habit.exercise_unit }}
-                        </h5>
+                        <h5><strong>Exercise</strong> {{ day.habit.exercise_minutes }} {{ day.habit.exercise_unit }}</h5>
                         <div class="mb-2">
                             <strong>Type:</strong>
                             {% for exercise in day.habit.exercise_type %}
@@ -59,6 +57,34 @@
                 </div>
             {% endfor %}
         </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">&laquo;&laquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">&laquo;</a>
+                    </li>
+                {% endif %}
+
+                {% for i in paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">&raquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ paginator.num_pages }}" aria-label="Last">&raquo;&raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 {% endblock %}
 
