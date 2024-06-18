@@ -69,12 +69,32 @@ function initializeFormAutoSubmit() {
 
     forms.forEach(form => {
         const saveButton = form.querySelector('button[type="submit"]');
-        if (!saveButton) {
-            form.addEventListener('input', (event) => {
+
+        form.addEventListener('input', (event) => {
+            if (!event.target.matches('button[type="submit"]')) {
+                event.preventDefault();
+                autoSubmitForm(form);
+            }
+        });
+
+        if (saveButton) {
+            saveButton.addEventListener('click', (event) => {
                 event.preventDefault();
                 autoSubmitForm(form);
             });
         }
+
+        $(form).find('select').each(function() {
+            const selectElement = $(this);
+            selectElement.select2({
+                theme: "bootstrap-5",
+                width: selectElement.data('width') ? selectElement.data('width') : selectElement.hasClass('w-100') ? '100%' : 'style',
+                placeholder: selectElement.data('placeholder'),
+                closeOnSelect: false,
+            }).on('change', function() {
+                autoSubmitForm(form);
+            });
+        });
     });
 }
 
