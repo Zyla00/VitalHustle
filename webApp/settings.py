@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-kvu&2c*6u+=8-j4@i&3$@9!y*sc!bazo@=9n6mwk4z7g-@$xwh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vitalhustle.azurewebsites.net', 'www.vitalhustle.azurewebsites.net']
+ALLOWED_HOSTS = ['*']
 
 
 load_dotenv()
