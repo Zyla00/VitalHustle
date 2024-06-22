@@ -1,40 +1,112 @@
 from django import forms
-from .models import Mood, Day, Habit
+from .models import MoodScale, MoodEmotion, MoodNote, Sleep, CoffeHabit, CigaretteHabit, Sports, AlcoholHabit
 
-class MoodForm(forms.ModelForm):
+class MoodScaleForm(forms.ModelForm):
     class Meta:
-        model = Mood
-        fields = ['scale', 'slept_scale', 'emotions', 'note']
+        model = MoodScale
+        fields = ['scale']
         widgets = {
-            'scale': forms.NumberInput(attrs={'required': False}),
-            'slept_scale': forms.NumberInput(attrs={'step': 0.5, 'min': 0, 'max': 24, 'required': False}),
+            'scale': forms.NumberInput(attrs={'step': 1, 'min': 0, 'max': 10, 'required': False}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(MoodScaleForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False
+
+class MoodEmotionForm(forms.ModelForm):
+    class Meta:
+        model = MoodEmotion
+        fields = ['emotions']
+        widgets = {
             'emotions': forms.SelectMultiple(attrs={'required': False}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(MoodEmotionForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False
+
+class MoodNoteForm(forms.ModelForm):
+    class Meta:
+        model = MoodNote
+        fields = ['note']
+        widgets = {
             'note': forms.Textarea(attrs={'required': False}),
         }
 
     def __init__(self, *args, **kwargs):
-        super(MoodForm, self).__init__(*args, **kwargs)
+        super(MoodNoteForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.required = False
 
-class HabitForm(forms.ModelForm):
+class CoffeHabitForm(forms.ModelForm):
     class Meta:
-        model = Habit
-        fields = ['coffee_amount', 'coffee_unit', 'cigarettes', 'cigarette_type', 'alcohol_amount', 'alcohol_unit', 'alcohol_type', 'exercise_minutes', 'exercise_unit', 'exercise_type']
+        model = CoffeHabit
+        fields = ['coffee_amount', 'coffee_unit']
         widgets = {
             'coffee_amount': forms.NumberInput(attrs={'required': False}),
             'coffee_unit': forms.Select(attrs={'required': False}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CoffeHabitForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False
+
+class CigaretteHabitForm(forms.ModelForm):
+    class Meta:
+        model = CigaretteHabit
+        fields = ['cigarettes', 'cigarette_type']
+        widgets = {
             'cigarettes': forms.NumberInput(attrs={'required': False}),
             'cigarette_type': forms.Select(attrs={'required': False}),
-            'alcohol_amount': forms.NumberInput(attrs={'required': False}),
-            'alcohol_unit': forms.Select(attrs={'required': False}),
-            'alcohol_type': forms.SelectMultiple(attrs={'required': False}),
-            'exercise_minutes': forms.NumberInput(attrs={'required': False}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CigaretteHabitForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False
+
+class SportsForm(forms.ModelForm):
+    class Meta:
+        model = Sports
+        fields = ['exercise_times', 'exercise_unit', 'exercise_type']
+        widgets = {
+            'exercise_times': forms.NumberInput(attrs={'required': False}),
             'exercise_unit': forms.Select(attrs={'required': False}),
             'exercise_type': forms.SelectMultiple(attrs={'required': False}),
         }
 
     def __init__(self, *args, **kwargs):
-        super(HabitForm, self).__init__(*args, **kwargs)
+        super(SportsForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False
+
+class AlcoholHabitForm(forms.ModelForm):
+    class Meta:
+        model = AlcoholHabit
+        fields = ['alcohol_amount', 'alcohol_unit', 'alcohol_type']
+        widgets = {
+            'alcohol_amount': forms.NumberInput(attrs={'required': False}),
+            'alcohol_unit': forms.Select(attrs={'required': False}),
+            'alcohol_type': forms.SelectMultiple(attrs={'required': False}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(AlcoholHabitForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False
+
+class SleepForm(forms.ModelForm):
+    class Meta:
+        model = Sleep
+        fields = ['slept_scale']
+        widgets = {
+            'slept_scale': forms.NumberInput(attrs={'step': 0.5, 'min': 0, 'max': 24, 'required': False}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SleepForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.required = False

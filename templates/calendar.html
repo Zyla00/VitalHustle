@@ -18,38 +18,38 @@
                         <h2><strong>Date:</strong> {{ day.date }}</h2>
                         <hr>
 
-                        <h3><strong>Mood:</strong> {{ day.mood.scale }}</h3>
+                        <h3><strong>Mood:</strong> {{ day.mood_scale.scale }}</h3>
                         <div class="mb-2">
                             <strong>Emotions:</strong>
-                            {% for emotion in day.mood.emotions %}
+                            {% for emotion in day.mood_emotion.emotions %}
                                 <span class="badge bg-primary">{{ emotion }}</span>
                             {% endfor %}
                         </div>
                         <div class="mb-2">
-                            <strong>Note:</strong> {{ day.mood.note }}
+                            <strong>Note:</strong> {{ day.mood_note.note }}
                         </div>
-                        <h3><strong>Sleep:</strong> {{ day.mood.slept_scale }}h</h3>
+                        <h3><strong>Sleep:</strong> {{ day.sleep.slept_scale }}h</h3>
                         <hr>
 
-                        <h5><strong>Coffee</strong>  {{ day.habit.coffee_amount }} {{ day.habit.coffee_unit }}</h5>
+                        <h5><strong>Coffee</strong>  {{ day.coffee_habit.coffee_amount }} {{ day.coffee_habit.coffee_unit }}</h5>
                         <hr>
 
-                        <h5><strong>Cigarettes</strong>  {{ day.habit.cigarettes }}: {{ day.habit.cigarette_type }}</h5>
+                        <h5><strong>Cigarettes</strong>  {{ day.cigarette_habit.cigarettes }}: {{ day.cigarette_habit.cigarette_type }}</h5>
                         <hr>
 
-                        <h5><strong>Alcohol</strong>  {{ day.habit.alcohol_amount }} {{ day.habit.alcohol_unit }}</h5>
+                        <h5><strong>Alcohol</strong>  {{ day.alcohol_habit.alcohol_amount }} {{ day.alcohol_habit.alcohol_unit }}</h5>
                         <div class="mb-2">
                             <strong>Type:</strong>
-                            {% for alcohol in day.habit.alcohol_type %}
+                            {% for alcohol in day.alcohol_habit.alcohol_type %}
                                 <span class="badge bg-secondary">{{ alcohol }}</span>
                             {% endfor %}
                         </div>
                         <hr>
 
-                        <h5><strong>Exercise</strong> {{ day.habit.exercise_minutes }} {{ day.habit.exercise_unit }}</h5>
+                        <h5><strong>Exercise</strong> {{ day.sports.exercise_minutes }} {{ day.sports.exercise_unit }}</h5>
                         <div class="mb-2">
                             <strong>Type:</strong>
-                            {% for exercise in day.habit.exercise_type %}
+                            {% for exercise in day.sports.exercise_type %}
                                 <span class="badge bg-success">{{ exercise }}</span>
                             {% endfor %}
                         </div>

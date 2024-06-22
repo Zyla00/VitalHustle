@@ -13,36 +13,36 @@
         <div class="tile form-container" id="addHighlightEffect">
             <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
-                <input type="hidden" name="form_id" value="mood-form">
+                <input type="hidden" name="form_id" value="mood-scale-form">
                 <h3 class="form-title">How was today?</h3>
                 <div class="range-container">
                     <input class="slider" type="range" class="form-range" min="0" max="10" step="1" id="moodRange"
-                           value="{{ mood_form.instance.scale }}" name="scale">
-                    <div class="range-value" id="moodRangeValue">{{ mood_form.instance.scale }}</div>
+                           value="{{ mood_scale_form.instance.scale }}" name="scale">
+                    <div class="range-value" id="moodRangeValue">{{ mood_scale_form.instance.scale }}</div>
                 </div>
             </form>
         </div>
         <div class="tile form-container" id="addHighlightEffect">
             <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
-                <input type="hidden" name="form_id" value="mood-form">
+                <input type="hidden" name="form_id" value="sleep-form">
                 <h3 class="form-title">How many hours did you sleep?</h3>
                 <div class="range-container">
                     <input class="slider" type="range" class="form-range slider" min="0" max="24" step="0.5"
-                           id="sleepRange" value="{{ mood_form.instance.slept_scale }}" name="slept_scale">
-                    <div class="range-value" id="sleepRangeValue">{{ mood_form.instance.slept_scale }}</div>
+                           id="sleepRange" value="{{ sleep_form.instance.slept_scale }}" name="slept_scale">
+                    <div class="range-value" id="sleepRangeValue">{{ sleep_form.instance.slept_scale }}</div>
                 </div>
             </form>
         </div>
         <div class="tile form-container">
             <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
-                <input type="hidden" name="form_id" value="mood-form">
+                <input type="hidden" name="form_id" value="mood-emotions-form">
                 <h3 class="form-title">Which emotions did you feel?</h3>
                 <select class="form-select" id="multiple-select-optgroup-field-2"
                         data-placeholder="Choose emotions" name="emotions" multiple>
-                    {% for emotion in mood_form.fields.emotions.choices %}
-                        <option value="{{ emotion.0 }}" {% if emotion.0 in mood_form.instance.emotions %}selected{% endif %}>{{ emotion.1 }}</option>
+                    {% for emotion in mood_emotion_form.fields.emotions.choices %}
+                        <option value="{{ emotion.0 }}" {% if emotion.0 in mood_emotion_form.instance.emotions %}selected{% endif %}>{{ emotion.1 }}</option>
                     {% endfor %}
                 </select>
             </form>
@@ -50,10 +50,10 @@
         <div class="tile form-container">
             <form method="post" action="{% url 'home' %}">
                 {% csrf_token %}
-                <input type="hidden" name="form_id" value="mood-form">
+                <input type="hidden" name="form_id" value="mood-note-form">
                 <h3 class="form-title">Would you like to add something more?</h3>
                 <textarea name="note" class="note-input form-control"
-                          placeholder="Give a few details about today...">{{ mood_form.instance.note }}</textarea>
+                          placeholder="Give a few details about today...">{{ mood_note_form.instance.note }}</textarea>
                 <button class="save-button" type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
@@ -61,9 +61,9 @@
     <div class="block-2">
         <div class="content-holder d-flex flex-wrap gap-3">
             <div class="tile form-container" id="addHighlightEffect">
-                <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="habit-form">
+                <form method="post" action="{% url 'home' %}" class="coffee-style-form">
                     {% csrf_token %}
-                    <input type="hidden" name="form_id" value="habit-form">
+                    <input type="hidden" name="form_id" value="coffee-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
@@ -72,14 +72,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="coffee_amount" placeholder="Add value" min="0" value="{{ habit_form.instance.coffee_amount }}">
+                                                   name="coffee_amount" placeholder="Add value" min="0" value="{{ coffee_form.instance.coffee_amount }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="coffee-style-select" id="unitSelect" name="coffee_unit">
-                                                <option value="ml" {% if habit_form.instance.coffee_unit == "ml" %}selected{% endif %}>ml</option>
-                                                <option value="l" {% if habit_form.instance.coffee_unit == "l" %}selected{% endif %}>l</option>
+                                                <option value="ml" {% if coffee_form.instance.coffee_unit == "ml" %}selected{% endif %}>ml</option>
+                                                <option value="l" {% if coffee_form.instance.coffee_unit == "l" %}selected{% endif %}>l</option>
                                             </select>
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
             <div class="tile form-container" id="addHighlightEffect">
                 <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="cigarettes-form">
                     {% csrf_token %}
-                    <input type="hidden" name="form_id" value="habit-form">
+                    <input type="hidden" name="form_id" value="cigarette-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
@@ -101,14 +101,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="cigarettes" placeholder="Add value" min="0" value="{{ habit_form.instance.cigarettes }}">
+                                                   name="cigarettes" placeholder="Add value" min="0" value="{{ cigarette_form.instance.cigarettes }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="coffee-style-select" id="unitSelect" name="cigarette_type">
-                                                {% for type in habit_form.fields.cigarette_type.choices %}
-                                                    <option value="{{ type.0 }}" {% if type.0 == habit_form.instance.cigarette_type %}selected{% endif %}>{{ type.1 }}</option>
+                                                {% for type in cigarette_form.fields.cigarette_type.choices %}
+                                                    <option value="{{ type.0 }}" {% if type.0 == cigarette_form.instance.cigarette_type %}selected{% endif %}>{{ type.1 }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -122,7 +122,7 @@
             <div class="tile form-container">
                 <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="alcohol-form">
                     {% csrf_token %}
-                    <input type="hidden" name="form_id" value="habit-form">
+                    <input type="hidden" name="form_id" value="alcohol-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
@@ -131,21 +131,21 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="alcohol_amount" min="0" value="{{ habit_form.instance.alcohol_amount }}">
+                                                   name="alcohol_amount" min="0" value="{{ alcohol_form.instance.alcohol_amount }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="coffee-style-select" id="unitSelect" name="alcohol_unit">
-                                                <option value="ml" {% if habit_form.instance.alcohol_unit == "ml" %}selected{% endif %}>ml</option>
-                                                <option value="l" {% if habit_form.instance.alcohol_unit == "l" %}selected{% endif %}>l</option>
+                                                <option value="ml" {% if alcohol_form.instance.alcohol_unit == "ml" %}selected{% endif %}>ml</option>
+                                                <option value="l" {% if alcohol_form.instance.alcohol_unit == "l" %}selected{% endif %}>l</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="choose-gap">
                                         <select class="form-select" id="multiple-select-optgroup-field-3" name="alcohol_type" multiple>
-                                            {% for alcohol in habit_form.fields.alcohol_type.choices %}
-                                                <option value="{{ alcohol.0 }}" {% if alcohol.0 in habit_form.instance.alcohol_type %}selected{% endif %}>{{ alcohol.1 }}</option>
+                                            {% for alcohol in alcohol_form.fields.alcohol_type.choices %}
+                                                <option value="{{ alcohol.0 }}" {% if alcohol.0 in alcohol_form.instance.alcohol_type %}selected{% endif %}>{{ alcohol.1 }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -156,9 +156,9 @@
                 </form>
             </div>
             <div class="tile form-container">
-                <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="exercise-form">
+                <form method="post" action="{% url 'home' %}" class="coffee-style-form" id="sports-form">
                     {% csrf_token %}
-                    <input type="hidden" name="form_id" value="habit-form">
+                    <input type="hidden" name="form_id" value="sports-form">
                     <div class="coffee-style-container">
                         <div class="coffee-style-row">
                             <div class="coffee-style-group">
@@ -167,14 +167,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <input type="number" class="coffee-style-control" id="valueInput"
-                                                   name="exercise_minutes" min="0" value="{{ habit_form.instance.exercise_minutes }}">
+                                                   name="exercise_times" min="0" value="{{ sports_form.instance.exercise_times }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select class="coffee-style-select" id="unitSelect" name="exercise_unit">
-                                                <option value="minutes" {% if habit_form.instance.exercise_unit == "minutes" %}selected{% endif %}>minutes</option>
-                                                <option value="hours" {% if habit_form.instance.exercise_unit == "hours" %}selected{% endif %}>hours</option>
+                                                <option value="minutes" {% if sports_form.instance.exercise_unit == "minutes" %}selected{% endif %}>minutes</option>
+                                                <option value="hours" {% if sports_form.instance.exercise_unit == "hours" %}selected{% endif %}>hours</option>
                                             </select>
                                         </div>
                                     </div>
@@ -182,8 +182,8 @@
                                         <select class="choose-gap" class="form-select"
                                                 id="multiple-select-optgroup-field-4"
                                                 name="exercise_type" multiple>
-                                            {% for exercise in habit_form.fields.exercise_type.choices %}
-                                                <option value="{{ exercise.0 }}" {% if exercise.0 in habit_form.instance.exercise_type %}selected{% endif %}>{{ exercise.1 }}</option>
+                                            {% for exercise in sports_form.fields.exercise_type.choices %}
+                                                <option value="{{ exercise.0 }}" {% if exercise.0 in sports_form.instance.exercise_type %}selected{% endif %}>{{ exercise.1 }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -227,6 +227,5 @@
                 closeOnSelect: false,
             });
         })
-
     </script>
 {% endblock %}
