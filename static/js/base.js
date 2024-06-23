@@ -135,3 +135,50 @@ function hideOffcanvas() {
     offcanvas.hide();
 }
 
+function initializeSlider(sliderId, valueId) {
+    const rangeInput = document.getElementById(sliderId);
+    const rangeValue = document.getElementById(valueId);
+    rangeInput.addEventListener('input', function () {
+        updateValue(rangeInput, rangeValue);
+    });
+    updateValue(rangeInput, rangeValue);
+}
+
+function updateValue(rangeInput, rangeValue) {
+    const value = rangeInput.value;
+    rangeValue.textContent = value;
+
+    const rangeWidth = rangeInput.offsetWidth;
+    const thumbWidth = 20;
+    const offset = ((value - rangeInput.min) / (rangeInput.max - rangeInput.min)) * (rangeWidth - thumbWidth);
+    rangeValue.style.left = `${offset + thumbWidth / 1}px`;
+
+    updateSliderColor(rangeInput, offset + thumbWidth / 2);
+    updateSliderBackground(rangeInput);
+}
+
+function updateSliderColor(rangeInput, width) {
+    rangeInput.style.setProperty('--slider-before-width', `${width}px`);
+}
+
+function updateSliderBackground(rangeInput) {
+    const value = rangeInput.value;
+    const max = rangeInput.max;
+    const percentage = (value / max) * 100;
+
+    let color;
+    if (percentage < 50) {
+        const r = 245 + ((0 - 245) * (percentage / 50));
+        const g = 250 + ((123 - 250) * (percentage / 50));
+        const b = 255 + ((255 - 255) * (percentage / 50));
+        color = `rgb(${r}, ${g}, ${b})`;
+    } else {
+        const r = 0 + ((0 - 0) * ((percentage - 50) / 50));
+        const g = 123 + ((123 - 123) * ((percentage - 50) / 50));
+        const b = 255 + ((255 - 255) * ((percentage - 50) / 50));
+        color = `rgb(${r}, ${g}, ${b})`;
+    }
+
+
+    rangeInput.style.setProperty('--slider-before-color', color);
+}

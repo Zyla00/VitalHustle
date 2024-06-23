@@ -24,39 +24,6 @@
     height: 100px;
 }
 
-.save-button {
-    display: block;
-    width: 50px; /* Fixed width for the button */
-    height: 50px; /* Fixed height to make it a circle */
-    padding: 0; /* No padding */
-    font-size: 1rem; /* Font size */
-    font-weight: bold; /* Bold text */
-    color: #ffffff; /* White text */
-    background-color: #007bff; /* Blue background */
-    border: none; /* No border */
-    border-radius: 50%; /* Make it a circle */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth transitions */
-    text-align: center; /* Center text */
-    line-height: 50px; /* Center text vertically */
-    margin: 5px auto 0; /* Center horizontally and add top margin */
-}
-
-.save-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
-}
-
-.save-button:active {
-    background-color: #004494; /* Even darker blue on click */
-    transform: translateY(0); /* Return to original position on click */
-}
-
-.save-button:focus {
-    outline: none; /* Remove default outline */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus outline */
-}
 
 .range-container {
     display: flex;
@@ -85,22 +52,22 @@
 }
 
 .tile {
-    background-color: #f8f9fa; /* Light gray background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 0 10px 20px 10px;
 }
 
 .tile-container {
-    margin-bottom: 20px; /* Space between tile containers */
+    margin-bottom: 20px;
 }
 
 .form-container {
-    background: #ffffff; /* White background for the form */
-    padding: 20px; /* Padding inside the form */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form */
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .range-container {
@@ -133,19 +100,19 @@
 }
 
 .tile {
-    background-color: #f8f9fa; /* Light gray background */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 30px;
-    margin-bottom: 3px; /* Space between tiles */
+    margin-bottom: 3px;
 }
 
 .form-container {
-    background: #ffffff; /* White background for the form */
-    padding: 30px; /* Padding inside the form */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form */
-    margin-bottom: 3px; /* Space between forms */
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3px;
 }
 
 .range-container {
@@ -166,9 +133,9 @@
 
 .form-title {
     font-family: 'Arial', sans-serif;
-    font-size: 1.2rem; /* Smaller font size */
+    font-size: 1.2rem;
     font-weight: bold;
-    color: #007bff; /* Blue color for the title */
+    color: #007bff;
     margin-bottom: 15px;
     border-bottom: 1px solid transparent;
     background-image: linear-gradient(to right, #5ca4f3, #cadffa);
@@ -176,7 +143,7 @@
     background-size: 100% 1px;
     background-repeat: no-repeat;
     padding-bottom: 5px;
-    text-align: center; /* Center align text */
+    text-align: center;
 }
 
 .custom-range {
@@ -192,7 +159,7 @@
     -webkit-appearance: none;
     width: 100%;
     height: 8px;
-    background: #ddd; /* Default background */
+    background: #ddd;
     border-radius: 5px;
     outline: none;
     position: relative;
@@ -207,8 +174,8 @@
     left: 0;
     height: 8px;
     border-radius: 5px;
-    background: var(--slider-before-color); /* Color for the filled part */
-    width: var(--slider-before-width); /* Initial width, will be updated via JavaScript */
+    background: var(--slider-before-color);
+    width: var(--slider-before-width);
     z-index: 0;
 }
 
@@ -217,16 +184,16 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #007bff; /* Blue color for the thumb */
+    background: #007bff;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     position: relative;
-    z-index: 1; /* Ensure thumb is above the pseudo-element */
+    z-index: 1;
 }
 
 .tile.highlighted {
-    transform: scale(1.05); /* Slightly enlarge the tile */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .coffee-style-form {
@@ -269,43 +236,41 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    font-size: 1rem; /* Rozmiar czcionki */
-    color: #495057; /* Kolor tekstu */
-    background-color: #fff; /* Jasnoszare tło */
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fff;
 }
 
 .coffee-style-control {
-    cursor: text; /* Kursor tekstu */
+    cursor: text;
 }
 
 .coffee-style-select {
-    appearance: none; /* Usuwa domyślny styl przeglądarki */
-    cursor: pointer; /* Kursor wskaźnika */
+    appearance: none;
+    cursor: pointer;
 }
 
 .coffee-style-control:focus, .coffee-style-select:focus {
-    border-color: #80bdff; /* Kolor obramowania podczas fokusu */
-    outline: none; /* Usuń domyślne obramowanie */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Cień fokusu */
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Styl dla opcji w menu rozwijanym */
 .coffee-style-select option {
-    background-color: #ffffff; /* Kolor tła opcji */
-    color: #495057; /* Kolor tekstu opcji */
+    background-color: #ffffff;
+    color: #495057;
 }
 
-/* Styl dla podświetlonej opcji w menu rozwijanym */
 .coffee-style-select option:hover, .coffee-style-select option:checked {
-    background-color: #80bdff; /* Kolor tła podczas podświetlenia */
-    color: #ffffff; /* Kolor tekstu podczas podświetlenia */
+    background-color: #80bdff;
+    color: #ffffff;
 }
 
-/* Usunięcie czarnej ramki po rozwinięciu menu wyboru */
+
 .coffee-style-select {
-    border: 1px solid #ccc; /* Zastosowanie niestandardowego koloru obramowania */
+    border: 1px solid #ccc;
     border-radius: 4px;
-    box-shadow: none; /* Usunięcie wewnętrznego cienia */
+    box-shadow: none;
 }
 
 .coffee-style-btn {

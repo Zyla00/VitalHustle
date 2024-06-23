@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit a Day</title>
+</head>
+<body>
+<form method="post" id="day-form" data-datepicker-id="{{ form.date.id_for_label }}">
+    {% csrf_token %}
+    <fieldset>
+        <p>
+            <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+            {{ form.date }}
+        </p>
+    </fieldset>
+
+    <fieldset>
+        <legend>Mood and Emotions</legend>
+        <p>
+            <label for="{{ form.mood_scale.id_for_label }}">{{ form.mood_scale.label }}</label>
+        <div class="range-container">
+            {{ form.mood_scale }}
+            <div class="range-value" id="moodRangeValue">{{ form.mood_scale.value }}</div>
+        </div>
+        </p>
+        <p>
+            <label for="{{ form.emotions.id_for_label }}">{{ form.emotions.label }}</label>
+            {{ form.emotions }}
+        </p>
+        <p>
+            <label for="{{ form.note.id_for_label }}">{{ form.note.label }}</label>
+            {{ form.note }}
+        </p>
+    </fieldset>
+    <hr>
+
+    <fieldset>
+        <legend>Sleep</legend>
+        <p>
+            <label for="{{ form.slept_scale.id_for_label }}">{{ form.slept_scale.label }}</label>
+        <div class="range-container">
+            {{ form.slept_scale }}
+            <div class="range-value" id="sleepRangeValue">{{ form.slept_scale.value }}</div>
+        </div>
+        </p>
+    </fieldset>
+    <hr>
+
+    <fieldset>
+        <legend>Coffee Consumption</legend>
+        <p>
+            <label for="{{ form.coffee_amount.id_for_label }}">{{ form.coffee_amount.label }}</label>
+            {{ form.coffee_amount }}
+        </p>
+        <p>
+            <label for="{{ form.coffee_unit.id_for_label }}">{{ form.coffee_unit.label }}</label>
+            {{ form.coffee_unit }}
+        </p>
+    </fieldset>
+    <hr>
+
+    <fieldset>
+        <legend>Smoking</legend>
+        <p>
+            <label for="{{ form.cigarettes.id_for_label }}">{{ form.cigarettes.label }}</label>
+            {{ form.cigarettes }}
+        </p>
+        <p>
+            <label for="{{ form.cigarette_type.id_for_label }}">{{ form.cigarette_type.label }}</label>
+            {{ form.cigarette_type }}
+        </p>
+    </fieldset>
+    <hr>
+
+    <fieldset>
+        <legend>Alcohol Consumption</legend>
+        <p>
+            <label for="{{ form.alcohol_amount.id_for_label }}">{{ form.alcohol_amount.label }}</label>
+            {{ form.alcohol_amount }}
+        </p>
+        <p>
+            <label for="{{ form.alcohol_unit.id_for_label }}">{{ form.alcohol_unit.label }}</label>
+            {{ form.alcohol_unit }}
+        </p>
+        <p>
+            <label for="{{ form.alcohol_type.id_for_label }}">{{ form.alcohol_type.label }}</label>
+            {{ form.alcohol_type }}
+        </p>
+    </fieldset>
+    <hr>
+
+    <fieldset>
+        <legend>Exercise</legend>
+        <p>
+            <label for="{{ form.exercise_times.id_for_label }}">{{ form.exercise_times.label }}</label>
+            {{ form.exercise_times }}
+        </p>
+        <p>
+            <label for="{{ form.exercise_unit.id_for_label }}">{{ form.exercise_unit.label }}</label>
+            {{ form.exercise_unit }}
+        </p>
+        <p>
+            <label for="{{ form.exercise_type.id_for_label }}">{{ form.exercise_type.label }}</label>
+            {{ form.exercise_type }}
+        </p>
+    </fieldset>
+    <button type="button" class="btn btn-apply rounded-pill shadow-none add-day-btn">Add</button>
+</form>
+</body>
+</html>
