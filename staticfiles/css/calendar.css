@@ -137,3 +137,9 @@ body {
     width: 20px;
     height: 20px;
 }
+
+.edit-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}

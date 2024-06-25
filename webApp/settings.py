@@ -84,9 +84,13 @@ WSGI_APPLICATION = 'webApp.wsgi.application'
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = os.environ.get("DJANGO_STATIC_URL", "/static/")
-STATIC_ROOT = os.environ.get("DJANGO_STATIC_ROOT", "./static/")
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+if DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # myproject/settings.py
 

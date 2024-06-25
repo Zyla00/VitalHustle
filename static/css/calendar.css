@@ -121,13 +121,14 @@ body {
     justify-content: flex-end;
 }
 
-.delete-button {
+.delete-button, .edit-button {
     border: none;
     background: none;
     cursor: pointer;
 }
 
-.delete-button:active {
+.delete-button:active,
+.edit-button:active {
     transition: transform 0.2s ease;
     transform: scale(0.95);
 }
@@ -136,4 +137,15 @@ body {
     filter: invert(35%) sepia(100%) saturate(7500%) hue-rotate(-15deg) brightness(80%) contrast(100%);
     width: 20px;
     height: 20px;
+}
+
+.edit-button img {
+    filter: invert(35%) sepia(100%) saturate(7500%) hue-rotate(90deg) brightness(100%) contrast(100%);
+    width: 20px;
+    height: 20px;
+}
+
+.badge {
+    margin-bottom: 3px;
+    margin-right: 1px !important;
 }

@@ -125,13 +125,40 @@ class DayCreateEditView(FormView):
     def get_form_kwargs(self):
         kwargs = super(DayCreateEditView, self).get_form_kwargs()
         kwargs['user'] = self.request.user
+        if self.kwargs.get('pk'):
+            day = get_object_or_404(Day, pk=self.kwargs['pk'], user=self.request.user.id)
+            kwargs['instance_id'] = day.id
+
+            initial = {
+                'date': day.date,
+                'mood_scale': day.mood_scale.scale if day.mood_scale else None,
+                'emotions': day.mood_emotion.emotions if day.mood_emotion else [],
+                'note': day.mood_note.note if day.mood_note else '',
+                'slept_scale': day.sleep.slept_scale if day.sleep else None,
+                'coffee_amount': day.coffee_habit.coffee_amount if day.coffee_habit else None,
+                'coffee_unit': day.coffee_habit.coffee_unit if day.coffee_habit else '',
+                'cigarettes': day.cigarette_habit.cigarettes if day.cigarette_habit else None,
+                'cigarette_type': day.cigarette_habit.cigarette_type if day.cigarette_habit else '',
+                'alcohol_amount': day.alcohol_habit.alcohol_amount if day.alcohol_habit else None,
+                'alcohol_unit': day.alcohol_habit.alcohol_unit if day.alcohol_habit else '',
+                'alcohol_type': day.alcohol_habit.alcohol_type if day.alcohol_habit else [],
+                'exercise_times': day.sports.exercise_times if day.sports else None,
+                'exercise_unit': day.sports.exercise_unit if day.sports else '',
+                'exercise_type': day.sports.exercise_type if day.sports else [],
+            }
+            kwargs['initial'] = initial
         return kwargs
 
     def form_valid(self, form):
-        user = self.request.user
-        date = form.cleaned_data['date']
+        if self.kwargs.get('pk'):
+            day = get_object_or_404(Day, pk=self.kwargs['pk'], user=self.request.user)
+            print(f"Day found: {day}")
+        else:
+            day = Day(user=self.request.user)
 
-        day = Day.objects.create(user=user, date=date)
+        if form.cleaned_data['date']:
+            day.date = form.cleaned_data['date']
+            day.save()
 
         mood_scale_value = form.cleaned_data.get('mood_scale')
         if mood_scale_value is not None:

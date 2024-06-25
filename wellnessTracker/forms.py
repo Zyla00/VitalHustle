@@ -125,6 +125,7 @@ class CombinedDayForm(forms.Form):
     date = forms.DateField(
         label='Date',
         input_formats=['%d-%m-%Y'],
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Select a date'
@@ -198,12 +199,17 @@ class CombinedDayForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
+        self.instance_id = kwargs.pop('instance_id', None)
         super(CombinedDayForm, self).__init__(*args, **kwargs)
 
     def clean_date(self):
         date_value = self.cleaned_data.get('date')
-        if date_value > date.today():
-            raise forms.ValidationError('The date cannot be in the future.')
-        if Day.objects.filter(user=self.user, date=date_value).exists():
-            raise forms.ValidationError('An entry for this date already exists.')
+        if not self.instance_id:
+            if not date_value:
+                raise forms.ValidationError('Date is required')
+            elif date_value > date.today():
+                raise forms.ValidationError('The date cannot be in the future.')
+            elif Day.objects.filter(user=self.user, date=date_value).exists():
+                raise forms.ValidationError('An entry for this date already exists.')
+
         return date_value

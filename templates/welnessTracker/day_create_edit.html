@@ -20,7 +20,6 @@
             <label for="{{ form.mood_scale.id_for_label }}">{{ form.mood_scale.label }}</label>
         <div class="range-container">
             {{ form.mood_scale }}
-            <div class="range-value" id="moodRangeValue">{{ form.mood_scale.value }}</div>
         </div>
         </p>
         <p>
@@ -40,7 +39,6 @@
             <label for="{{ form.slept_scale.id_for_label }}">{{ form.slept_scale.label }}</label>
         <div class="range-container">
             {{ form.slept_scale }}
-            <div class="range-value" id="sleepRangeValue">{{ form.slept_scale.value }}</div>
         </div>
         </p>
     </fieldset>
@@ -104,7 +102,7 @@
             {{ form.exercise_type }}
         </p>
     </fieldset>
-    <button type="button" class="btn btn-apply rounded-pill shadow-none add-day-btn">Add</button>
+    <button type="button" class="btn btn-apply rounded-pill shadow-none add-edit-day-btn">Save</button>
 </form>
 </body>
 </html>

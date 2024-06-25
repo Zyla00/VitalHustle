@@ -6,4 +6,5 @@ urlpatterns = [
     path('day/create/', DayCreateEditView.as_view(), name='day-create-edit'),
     path('day/delete/<int:pk>', DayDeleteView.as_view(), name='day-delete'),
     path('day/previous/', FetchPreviousDayView.as_view(), name='fetch-next-day'),
+    path('day/edit/<int:pk>/', DayCreateEditView.as_view(), name='day-edit'),
 ]

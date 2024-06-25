@@ -43,7 +43,7 @@ function fetchAddDayForm(callback) {
 }
 
 function attachAddDayListener() {
-    const addDayButton = document.querySelector('.add-day-btn');
+    const addDayButton = document.querySelector('.add-edit-day-btn');
     if (addDayButton) {
         addDayButton.addEventListener('click', function (event) {
             event.preventDefault();
