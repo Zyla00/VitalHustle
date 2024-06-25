@@ -1,0 +1,41 @@
+.btn-apply {
+    color: white;
+    background-color: #1a62ff;
+    width: 5rem !important;
+    outline: none !important;
+    transition: transform 0.2s ease;
+}
+
+.btn-apply:hover {
+    color: white;
+    background-color: #004494;
+    outline: none !important;
+}
+
+.btn-apply:active {
+    transform: scale(0.95);
+}
+
+.form-switch-container {
+    display: flex;
+    align-items: center;
+}
+
+.form-switch-container label {
+    margin-right: 10px;
+}
+
+.form-check-inline {
+    display: inline-flex;
+    align-items: center;
+}
+
+form select,
+form input,
+.btn-close {
+    box-shadow: none !important;
+}
+
+.btn-close:active {
+    transform: scale(0.95);
+}

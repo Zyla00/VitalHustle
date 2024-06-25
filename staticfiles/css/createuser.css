@@ -1,0 +1,82 @@
+body {
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+.h-custom {
+    height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+
+.form-container {
+    background: #ffffff; /* White background for the form */
+    padding: 2rem; /* Padding inside the form */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form */
+}
+
+.form-outline {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-outline label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 1rem;
+    pointer-events: none;
+    transition: all 0.2s;
+}
+
+.form-outline input:focus + label,
+.form-outline input:not(:placeholder-shown) + label {
+    top: -1.5rem;
+    left: 0;
+    height: auto;
+    padding: 0;
+    font-size: 0.875rem;
+    color: #495057;
+}
+
+.form-outline input {
+    border: 1px solid #ced4da; /* Border color for inputs */
+    border-radius: 5px; /* Rounded corners for inputs */
+    padding: 1rem; /* Padding for inputs */
+}
+
+.form-outline input:focus {
+    border-color: #80bdff; /* Border color on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Shadow on focus */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Primary button color */
+    border-color: #007bff; /* Primary button border color */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3; /* Darker border on hover */
+}
+
+.btn-primary:active {
+    background-color: #004494; /* Even darker blue on click */
+    transform: translateY(0); /* Return to original position on click */
+}
+
+.btn-primary:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus outline */
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
