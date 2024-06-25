@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'webApp.wsgi.application'
 
 STATIC_URL = os.environ.get("DJANGO_STATIC_URL", "/static/")
 STATIC_ROOT = os.environ.get("DJANGO_STATIC_ROOT", "./static/")
-STATICFILES_STORAGE = ('whitenoise.storage.CompressedManifestStaticFilesStorage')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # myproject/settings.py
