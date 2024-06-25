@@ -25,7 +25,7 @@ function handleAddDay() {
 }
 
 function fetchAddDayForm(callback) {
-    const formEndpoint = '/day-create/';
+    const formEndpoint = '/day/create/';
 
     fetch(formEndpoint)
         .then(response => {
@@ -56,7 +56,7 @@ function applyAddDayData() {
     const csrftoken = getCookie('csrftoken');
     const form = new FormData(document.getElementById('day-form'));
 
-    fetch('/day-create/', {
+    fetch('/day/create/', {
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
@@ -98,7 +98,6 @@ function initializeSelect2() {
 
 function initializeDatepicker(datepickerId) {
     const dateInput = document.getElementById(datepickerId);
-    console.log('Date Input: ', dateInput)
     if (dateInput) {
         flatpickr(dateInput, {
             dateFormat: 'd-m-Y',
@@ -118,10 +117,11 @@ function addNewDayToDOM(day) {
     const maxItems = 12; // Adjust based on your pagination settings
 
     const newDayElement = createDayElement(day);
+    const deleteButton = newDayElement.querySelector('.delete-button');
+    bindDeleteEvent(deleteButton);
 
     const dayDate = new Date(day.date.split('-').reverse().join('-'));
 
-    // Find the correct position to insert the new day
     let inserted = false;
     for (let i = 0; i < days.length; i++) {
         const dayElement = days[i];
@@ -148,11 +148,21 @@ function addNewDayToDOM(day) {
 
 function createDayElement(day) {
     const newDayElement = document.createElement('div');
+    const staticBaseUrl = document.body.getAttribute('data-static-base-url');
+    const DeleteIconUrl = staticBaseUrl + 'img/delete_icon.svg';
     newDayElement.classList.add('col', 'd-flex', 'flex-column');
+
+    const formattedDate = formatDate(day.date);
 
     newDayElement.innerHTML = `
         <div class="tile flex-grow-1 d-flex flex-column">
-            <h2><strong>Date:</strong> ${day.date}</h2>
+            <div class="right-align mb-2">
+                <button class="delete-button" data-day-id="${day.id}">
+                    <img src="${DeleteIconUrl}" alt="Delete">
+                </button>
+            </div>
+            
+            <h2><strong>Date:</strong> ${formattedDate}</h2>
             <hr>
 
             ${day.mood_scale !== null ? `<h3><strong>Mood:</strong> ${day.mood_scale}</h3>` : ''}
@@ -191,5 +201,99 @@ function createDayElement(day) {
             ` : ''}
         </div>
     `;
+
     return newDayElement;
+}
+
+function setupDeleteButtons() {
+    document.querySelectorAll('.delete-button').forEach(button => {
+        bindDeleteEvent(button);
+    });
+}
+
+function bindDeleteEvent(button) {
+    button.addEventListener('click', function () {
+        const dayId = this.dataset.dayId;
+
+        document.getElementById('modalElementTitle').textContent = 'Confirm day deletion';
+        document.getElementById('modalElementBody').innerHTML = 'Are you sure you want to delete this day?';
+        const modalFooter = document.getElementById('modalElementFooter');
+        modalFooter.innerHTML = `
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+        `;
+
+        let deleteModal = new bootstrap.Modal(document.getElementById('modalElement'), {
+            keyboard: false
+        });
+        deleteModal.show();
+
+        document.getElementById('confirmDelete').onclick = function () {
+            fetch(`/day/delete/${dayId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({'id': dayId})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.closest('.col').remove();
+                    fetchPreviousDay();
+                    deleteModal.hide();
+                    window.alertManager.success('Day deleted successfully!');
+                } else {
+                    deleteModal.hide();
+                    window.alertManager.error(data.error);
+                }
+            })
+            .catch(error => {
+                deleteModal.hide();
+                window.alertManager.error('Unexpected issue. Try again later!');
+            });
+        };
+    });
+}
+
+function fetchPreviousDay() {
+    const lastDayElement = document.querySelector('.container .row .col:last-child');
+    const lastDate = lastDayElement ? lastDayElement.querySelector('h2 strong').nextSibling.textContent.trim() : null;
+
+    if (lastDate) {
+        fetch(`/day/previous/?last_date=${lastDate}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch the next day.');
+                return response.json();
+            })
+            .then(data => {
+                if (data.day) {
+                    const container = document.querySelector('.container .row');
+                    const newDayElement = createDayElement(data.day);
+                    container.appendChild(newDayElement);
+                    const deleteButton = newDayElement.querySelector('.delete-button');
+                    bindDeleteEvent(deleteButton);
+                }
+            })
+    }
+}
+
+function formatDate(dateStr) {
+    const months = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+    const parts = dateStr.split('-');
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+
+    const date = new Date(year, month, day);
+
+    return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }

@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block css %}
     {% endblock %}
-<body>
+<body data-static-base-url="{% static '' %}">
 <main>
     <div id="sidebar" class="d-flex flex-column flex-shrink-0 p-3 sidebar">
         <div class="logo-container">
@@ -24,19 +24,22 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="{% url 'home' %}" class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page">
+                <a href="{% url 'home' %}" class="nav-link {% if request.path == '/' %}active{% endif %}"
+                   aria-current="page">
                     <img class="img-style nav-icon" src="{% static 'img/home_icon.svg' %}" alt="Icon">
                     Home
                 </a>
             </li>
             <li>
-                <a href="{% url 'cald-view' %}" class="nav-link text-white {% if request.path == '/cald/' %}active{% endif %}">
+                <a href="{% url 'cald-view' %}"
+                   class="nav-link text-white {% if request.path == '/cald/' %}active{% endif %}">
                     <img class="img-style nav-icon" src="{% static 'img/calendar_icon.svg' %}" alt="Icon">
                     Calendar
                 </a>
             </li>
             <li>
-                <a href="{% url 'Statistics-view' %}" class="nav-link text-white {% if request.path == '/statistics/' %}active{% endif %}">
+                <a href="{% url 'Statistics-view' %}"
+                   class="nav-link text-white {% if request.path == '/statistics/' %}active{% endif %}">
                     <img class="img-style nav-icon" src="{% static 'img/statistic_icon.svg' %}" alt="Icon">
                     Statistics
                 </a>
@@ -84,16 +87,30 @@
     <div class="offcanvas-body"></div>
 </div>
 
+<div class="modal fade" id="modalElement" tabindex="-1" aria-labelledby="modalElementTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalElementTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalElementBody"></div>
+            <div class="modal-footer" id="modalElementFooter"></div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 <script src="{% static 'js/utils/alert.js' %}"></script>
 <script src="{% static 'js/base.js' %}"></script>
 <script type="text/javascript">
-        window.addEventListener('load', () => {
-            initializeSidebarToggle();
-            window.alertManager = new AlertManager();
-            initializeChangePasswordTrigger();
-        })
-    </script>
+    window.addEventListener('load', () => {
+        initializeSidebarToggle();
+        window.alertManager = new AlertManager();
+        initializeChangePasswordTrigger();
+        setupModalCleanup();
+    })
+</script>
 {% block script %}{% endblock %}
 </body>
 </html>

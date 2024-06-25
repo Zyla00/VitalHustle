@@ -29,6 +29,11 @@
             {% for day in days %}
                 <div class="col d-flex flex-column">
                     <div class="tile flex-grow-1 d-flex flex-column">
+                    <div class="right-align mb-2">
+                        <button class="delete-button" data-day-id="{{ day.id }}">
+                            <img src="{% static 'img/delete_icon.svg' %}" alt="Delete">
+                        </button>
+                    </div>
                         <h2><strong>Date:</strong> {{ day.date }}</h2>
                         <hr>
 
@@ -144,6 +149,7 @@
     <script type="text/javascript">
         window.addEventListener('load', () => {
             initializeAddDayTrigger();
+            setupDeleteButtons();
         })
     </script>
 {% endblock %}

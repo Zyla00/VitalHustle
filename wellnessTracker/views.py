@@ -2,7 +2,9 @@ from django.http import JsonResponse
 from django.db import transaction
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, View
+from django.shortcuts import get_object_or_404
+from datetime import datetime
 from .forms import (MoodScaleForm, MoodEmotionForm, MoodNoteForm, CoffeHabitForm, CigaretteHabitForm, SportsForm,
                     AlcoholHabitForm, SleepForm, CombinedDayForm)
 from .models import MoodScale, MoodEmotion, MoodNote, Sleep, CoffeHabit, CigaretteHabit, Sports, AlcoholHabit, Day
@@ -186,6 +188,7 @@ class DayCreateEditView(FormView):
         day.save()
 
         day_data = {
+            'id': day.id,
             'date': day.date.strftime('%d-%m-%Y'),
             'mood_scale': day.mood_scale.scale if day.mood_scale else None,
             'emotions': day.mood_emotion.emotions if day.mood_emotion else [],
@@ -213,3 +216,57 @@ class DayCreateEditView(FormView):
         }
 
         return JsonResponse({'success': False, 'errors': errors})
+
+class DayDeleteView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def post(self, request, *args, **kwargs):
+        day_id = kwargs.get('pk')
+        user = request.user
+        day = get_object_or_404(Day, pk=day_id, user=user)
+
+        if day:
+            day.delete()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': 'Delete unsuccessful. Please try again later'})
+
+class FetchPreviousDayView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request, *args, **kwargs):
+        last_date_str = request.GET.get('last_date')
+
+        if last_date_str:
+            try:
+                last_date = datetime.strptime(last_date_str, "%B %d, %Y").date()
+            except ValueError:
+                return JsonResponse({'error': 'Invalid date format'}, status=400)
+
+            previous_day = Day.objects.filter(user=request.user, date__lt=last_date).order_by('-date').first()
+            if previous_day:
+                day_data = {
+                    'id': previous_day.id,
+                    'date': previous_day.date.strftime('%d-%m-%Y'),
+                    'mood_scale': previous_day.mood_scale.scale if previous_day.mood_scale else None,
+                    'emotions': previous_day.mood_emotion.emotions if previous_day.mood_emotion else [],
+                    'note': previous_day.mood_note.note if previous_day.mood_note else '',
+                    'slept_scale': previous_day.sleep.slept_scale if previous_day.sleep else None,
+                    'coffee_amount': previous_day.coffee_habit.coffee_amount if previous_day.coffee_habit else None,
+                    'coffee_unit': previous_day.coffee_habit.coffee_unit if previous_day.coffee_habit else '',
+                    'cigarettes': previous_day.cigarette_habit.cigarettes if previous_day.cigarette_habit else None,
+                    'cigarette_type': previous_day.cigarette_habit.cigarette_type if previous_day.cigarette_habit else '',
+                    'alcohol_amount': previous_day.alcohol_habit.alcohol_amount if previous_day.alcohol_habit else None,
+                    'alcohol_unit': previous_day.alcohol_habit.alcohol_unit if previous_day.alcohol_habit else '',
+                    'alcohol_type': previous_day.alcohol_habit.alcohol_type if previous_day.alcohol_habit else [],
+                    'exercise_times': previous_day.sports.exercise_times if previous_day.sports else None,
+                    'exercise_unit': previous_day.sports.exercise_unit if previous_day.sports else '',
+                    'exercise_type': previous_day.sports.exercise_type if previous_day.sports else [],
+                }
+                return JsonResponse({'day': day_data})
+            else:
+                return JsonResponse({'message': 'No more days available'}, status=404)
+        else:
+            return JsonResponse({'error': 'No date provided'}, status=400)

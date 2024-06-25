@@ -182,3 +182,13 @@ function updateSliderBackground(rangeInput) {
 
     rangeInput.style.setProperty('--slider-before-color', color);
 }
+
+function setupModalCleanup() {
+    const modalElement = document.getElementById('modalElement');
+
+    modalElement.addEventListener('hidden.bs.modal', function () {
+        document.getElementById('modalElementTitle').textContent = '';
+        document.getElementById('modalElementBody').innerHTML = '';
+        document.getElementById('modalElementFooter').innerHTML = '';
+    });
+}

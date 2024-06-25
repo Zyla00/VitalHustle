@@ -189,12 +189,20 @@ class Day(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def delete(self, *args, **kwargs):
-        self.mood_scale.delete()
-        self.mood_emotion.delete()
-        self.mood_note.delete()
-        self.sleep.delete()
-        self.coffee_habit.delete()
-        self.cigarette_habit.delete()
-        self.alcohol_habit.delete()
-        self.sports.delete()
+        if self.mood_scale:
+            self.mood_scale.delete()
+        if self.mood_emotion:
+            self.mood_emotion.delete()
+        if self.mood_note:
+            self.mood_note.delete()
+        if self.sleep:
+            self.sleep.delete()
+        if self.coffee_habit:
+            self.coffee_habit.delete()
+        if self.cigarette_habit:
+            self.cigarette_habit.delete()
+        if self.alcohol_habit:
+            self.alcohol_habit.delete()
+        if self.sports:
+            self.sports.delete()
         super().delete(*args, **kwargs)
