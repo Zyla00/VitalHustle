@@ -218,16 +218,16 @@ class CombinedDayForm(forms.Form):
     def clean_mood_scale(self):
         mood_scale = self.cleaned_data.get('mood_scale')
         if mood_scale is not None:
-            if not 1 <= mood_scale <= 10:
-                raise forms.ValidationError('Mood scale must be between 1 and 10.')
+            if not 0 <= mood_scale <= 10:
+                raise forms.ValidationError('Mood scale must be between 0 and 10.')
         return mood_scale
 
     def clean_slept_scale(self):
         slept_scale = self.cleaned_data.get('slept_scale')
         if slept_scale is not None:
-            half_step = Decimal('0.5')  # Convert 0.5 to a Decimal
-            if slept_scale % half_step != 0 or not Decimal('0.5') <= slept_scale <= Decimal('10'):
-                raise forms.ValidationError('Slept scale must be a multiple of 0.5 and between 0.5 and 10.')
+            half_step = Decimal('0.5')
+            if slept_scale % half_step != 0 or not Decimal('0.0') <= slept_scale <= Decimal('10'):
+                raise forms.ValidationError('Slept scale must be a multiple of 0.5 and between 0 and 10.')
         return slept_scale
 
     def clean_date(self):
@@ -253,7 +253,7 @@ class CombinedDayForm(forms.Form):
         exercise_times = cleaned_data.get('exercise_times')
         exercise_type = cleaned_data.get('exercise_type')
 
-        if cigarette_type and (cigarettes is None or cigarettes == 0):
+        if cigarette_type and cigarette_type != 'choose-type' and (cigarettes is None or cigarettes == 0):
             self.add_error('cigarettes', 'You must specify the amount of cigarettes if you select a cigarette type.')
 
         if alcohol_type and (alcohol_amount is None or alcohol_amount == 0):
