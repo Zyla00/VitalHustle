@@ -1,0 +1,36 @@
+body {
+    font-family: 'Arial', sans-serif;
+    /*background-color: #f0f2f5;*/
+    margin: 40px;
+    padding: 30px;
+}
+
+.page-title {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 35px;
+    border-bottom: 1px solid transparent;
+    background-image: linear-gradient(to right, #5ca4f3, #cadffa);
+    background-position: bottom;
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.rounded-white-div {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    width: 1000px;
+    height: 500px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: auto; /* Center align */
+}
+
+/*canvas {*/
+/*    display: block;*/
+/*    margin: auto;*/
+/*}*/

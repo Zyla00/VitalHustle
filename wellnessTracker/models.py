@@ -10,6 +10,7 @@ class MoodScale(models.Model):
                                 help_text='How user felt today on a scale from 0 to 10')
     updated_at = models.DateTimeField(auto_now=True, help_text='Time when the scale was last updated')
 
+
 class MoodEmotion(models.Model):
     EMOTION_CHOICES = (
         ('happy', 'Happy'), ('sad', 'Sad'), ('angry', 'Angry'), ('excited', 'Excited'),
