@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download data</title>
+    {% load static %}
+</head>
+<body>
+<form method="post" id="download-form">
+    {% csrf_token %}
+    {% for field in form %}
+        <p>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+        </p>
+    {% endfor %}
+    <button type="button" class="btn btn-apply rounded-pill shadow-none download-day-btn">Download</button>
+</form>
+</body>
+</html>

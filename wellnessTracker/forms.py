@@ -264,3 +264,32 @@ class CombinedDayForm(forms.Form):
                            'You must specify the number of exercise times if you select an exercise type.')
 
         return cleaned_data
+
+class DateRangeForm(forms.Form):
+    date_from = forms.DateField(
+        label='Start Date',
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'id': 'date_from_picker'
+        })
+    )
+    date_to = forms.DateField(
+        label='End Date',
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'id': 'date_to_picker'
+        })
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        date_from = cleaned_data.get('date_from')
+        date_to = cleaned_data.get('date_to')
+
+        if not date_from or not date_to:
+            raise forms.ValidationError('Both start and end dates are required.')
+
+        if date_to < date_from:
+            raise forms.ValidationError('The end date cannot be earlier than the start date.')
+
+        return cleaned_data

@@ -288,7 +288,6 @@ function fetchPreviousDay() {
                     container.appendChild(newDayElement);
                     const deleteButton = newDayElement.querySelector('.delete-button');
                     const editButton = newDayElement.querySelector('.edit-button');
-                    console.log('editButton ', editButton)
                     bindDeleteEvent(deleteButton);
                     bindEditEvent(editButton);
                 }
@@ -420,4 +419,99 @@ function disableDateField() {
     if (dateField) {
         dateField.setAttribute('disabled', 'disabled');
     }
+}
+
+function initializeDownloadTrigger() {
+    const downloadButton = document.getElementById('DataDownloadButton');
+    if (downloadButton) {
+        downloadButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            handleDownloadData();
+        });
+    }
+}
+
+function handleDownloadData() {
+    const offcanvasBody = document.getElementById('offcanvasElement').querySelector('.offcanvas-body');
+    const offcanvasTitle = document.getElementById('offcanvasElementLabel');
+    const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasElement'));
+
+    offcanvasTitle.textContent = 'Download Data';
+    fetchDownloadForm(function(htmlForm) {
+        displayFormInOffcanvas(htmlForm, offcanvasBody, offcanvas);
+        attachDownloadDataListener();
+        initializeDatepicker('date_from_picker');
+        initializeDatepicker('date_to_picker');
+    });
+}
+
+function fetchDownloadForm(callback) {
+    const formEndpoint = '/days/prepare-export/';
+
+    fetch(formEndpoint)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(htmlForm => {
+            callback(htmlForm);
+        })
+        .catch(error => {
+            callback('<p>Error loading the form.</p>');
+        });
+}
+
+function attachDownloadDataListener() {
+    const downloadButton = document.querySelector('.download-day-btn');
+    if (downloadButton) {
+        downloadButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            applyDownloadData();
+        });
+    }
+}
+
+function applyDownloadData() {
+    const csrftoken = getCookie('csrftoken');
+    const formElement = document.querySelector('form#download-form');
+    const formData = new FormData(formElement);
+
+    const dateFrom = convertDateToYMD(formData.get('date_from'));
+    const dateTo = convertDateToYMD(formData.get('date_to'));
+
+    formData.set('date_from', dateFrom);
+    formData.set('date_to', dateTo);
+
+
+    fetch('/days/prepare-export/', {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrftoken,
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.alertManager.success('Data download prepared!');
+            hideOffcanvas();
+            window.location.href = `/days/export/?date_from=${data.date_from}&date_to=${data.date_to}`;
+        } else {
+            Object.keys(data.errors).forEach(field => {
+                const message = `${field}: ${data.errors[field].join(', ')}`;
+                window.alertManager.error(message);
+            });
+        }
+    })
+    .catch(error => {
+        window.alertManager.error('Unexpected issue. Try again later!');
+    });
+}
+
+function convertDateToYMD(dateStr) {
+    const [day, month, year] = dateStr.split('-');
+    return `${year}-${month}-${day}`;
 }

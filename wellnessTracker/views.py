@@ -1,4 +1,6 @@
-from django.http import JsonResponse
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+from django.http import JsonResponse, HttpResponse
 from django.db import transaction
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,7 +8,7 @@ from django.views.generic import TemplateView, FormView, View
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 from .forms import (MoodScaleForm, MoodEmotionForm, MoodNoteForm, CoffeHabitForm, CigaretteHabitForm, SportsForm,
-                    AlcoholHabitForm, SleepForm, CombinedDayForm)
+                    AlcoholHabitForm, SleepForm, CombinedDayForm, DateRangeForm)
 from .models import MoodScale, MoodEmotion, MoodNote, Sleep, CoffeHabit, CigaretteHabit, Sports, AlcoholHabit, Day
 
 
@@ -317,3 +319,84 @@ class FetchPreviousDayView(LoginRequiredMixin, View):
                 return JsonResponse({'message': 'No more days available'}, status=404)
         else:
             return JsonResponse({'error': 'No date provided'}, status=400)
+
+
+class ExportDaysExcelView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def get(self, request, *args, **kwargs):
+        date_from = request.GET.get('date_from')
+        date_to = request.GET.get('date_to')
+
+        if not date_from or not date_to:
+            return HttpResponse("Invalid date range", status=400)
+
+        try:
+            date_from = datetime.strptime(date_from, '%Y-%m-%d').date()
+            date_to = datetime.strptime(date_to, '%Y-%m-%d').date()
+        except ValueError:
+            return HttpResponse("Invalid date format", status=400)
+
+        days = Day.objects.filter(user=request.user, date__range=(date_from, date_to)).order_by('date')
+
+        workbook = Workbook()
+        worksheet = workbook.active
+        worksheet.title = "Days Data"
+
+        headers = ['Date', 'Mood Scale', 'Emotions', 'Note', 'Slept Scale', 'Coffee Amount', 'Coffee Unit',
+                   'Cigarettes', 'Cigarette Type', 'Alcohol Amount', 'Alcohol Unit', 'Alcohol Type',
+                   'Exercise Times', 'Exercise Unit', 'Exercise Type']
+        worksheet.append(headers)
+
+        column_widths = [15, 10, 50, 50, 10, 15, 10, 10, 15, 15, 10, 50, 15, 10, 50]
+        for i, column_width in enumerate(column_widths, 1):
+            worksheet.column_dimensions[get_column_letter(i)].width = column_width
+
+        for day in days:
+            worksheet.append([
+                day.date.strftime('%Y-%m-%d'),
+                day.mood_scale.scale if day.mood_scale else '',
+                ", ".join(day.mood_emotion.emotions) if day.mood_emotion else '',
+                day.mood_note.note if day.mood_note else '',
+                day.sleep.slept_scale if day.sleep else '',
+                day.coffee_habit.coffee_amount if day.coffee_habit else '',
+                day.coffee_habit.coffee_unit if day.coffee_habit else '',
+                day.cigarette_habit.cigarettes if day.cigarette_habit else '',
+                day.cigarette_habit.cigarette_type if day.cigarette_habit else '',
+                day.alcohol_habit.alcohol_amount if day.alcohol_habit else '',
+                day.alcohol_habit.alcohol_unit if day.alcohol_habit else '',
+                ", ".join(day.alcohol_habit.alcohol_type) if day.alcohol_habit else '',
+                day.sports.exercise_times if day.sports else '',
+                day.sports.exercise_unit if day.sports else '',
+                ", ".join(day.sports.exercise_type) if day.sports else ''
+            ])
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename="days_{date_from}_{date_to}.xlsx"'
+
+        workbook.save(response)
+        return response
+
+
+class ProcessDaysExportView(LoginRequiredMixin, FormView):
+    template_name = 'welnessTracker/day_download.html'
+    form_class = DateRangeForm
+    login_url = '/login/'
+    redirect_field_name = 'next'
+
+    def form_valid(self, form):
+        date_from = form.cleaned_data['date_from']
+        date_to = form.cleaned_data['date_to']
+        return JsonResponse({'success': True, 'date_from': date_from.strftime('%Y-%m-%d'),
+                             'date_to': date_to.strftime('%Y-%m-%d')})
+
+    def form_invalid(self, form):
+        errors = {
+            str(form.fields[field_name].label if field_name in form.fields and form.fields[
+                field_name].label else field_name):
+                [str(message) for message in error_messages]
+            for field_name, error_messages in form.errors.items()
+        }
+
+        return JsonResponse({'success': False, 'errors': errors})
