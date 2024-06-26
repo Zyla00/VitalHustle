@@ -92,6 +92,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
         form_id_list = request.POST.getlist('form_id')
         form_id = form_id_list[0] if form_id_list else None
 
+        form = None
         if form_id == 'mood-scale-form':
             form = MoodScaleForm(request.POST, instance=day.mood_scale)
         elif form_id == 'mood-emotions-form':
@@ -108,14 +109,34 @@ class HomeView(LoginRequiredMixin, TemplateView):
             form = AlcoholHabitForm(request.POST, instance=day.alcohol_habit)
         elif form_id == 'sports-form':
             form = SportsForm(request.POST, instance=day.sports)
-        else:
-            return
 
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False})
+        if not form:
+            return JsonResponse({'success': False, 'reason': 'No valid form found'})
+
+        if not form.is_valid():
+            return JsonResponse({'success': False, 'reason': 'Form validation failed'})
+
+        if form_id == 'cigarette-form' and not self.validate_cigarettes(form.cleaned_data):
+            return JsonResponse({'success': False, 'reason': 'Cigarette validation failed'})
+        elif form_id == 'alcohol-form' and not self.validate_alcohol(form.cleaned_data):
+            return JsonResponse({'success': False, 'reason': 'Alcohol validation failed'})
+        elif form_id == 'sports-form' and not self.validate_exercise(form.cleaned_data):
+            return JsonResponse({'success': False, 'reason': 'Exercise validation failed'})
+
+        form.save()
+        return JsonResponse({'success': True})
+
+    @staticmethod
+    def validate_cigarettes(data):
+        return bool(data.get('cigarettes')) or not data.get('cigarette_type')
+
+    @staticmethod
+    def validate_alcohol(data):
+        return bool(data.get('alcohol_amount')) or not data.get('alcohol_type')
+
+    @staticmethod
+    def validate_exercise(data):
+        return bool(data.get('exercise_times')) or not data.get('exercise_type')
 
 
 class DayCreateEditView(FormView):
@@ -152,7 +173,6 @@ class DayCreateEditView(FormView):
     def form_valid(self, form):
         if self.kwargs.get('pk'):
             day = get_object_or_404(Day, pk=self.kwargs['pk'], user=self.request.user)
-            print(f"Day found: {day}")
         else:
             day = Day(user=self.request.user)
 

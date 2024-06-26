@@ -45,7 +45,7 @@ class CoffeHabit(models.Model):
         ('l', 'l')
     ]
 
-    coffee_amount = models.PositiveIntegerField("How much coffee did you drink?", default=0, blank=True, null=True)
+    coffee_amount = models.PositiveIntegerField("How much coffee did you drink?", blank=True, null=True)
     coffee_unit = models.CharField("Unit of coffee", max_length=2, choices=UNIT_CHOICES, default='ml', blank=True,
                                    null=True)
     updated_at = models.DateTimeField(auto_now=True, help_text='Time when the interface was last updated')
@@ -67,7 +67,7 @@ class CigaretteHabit(models.Model):
         ('other', 'Other')
     ]
 
-    cigarettes = models.PositiveIntegerField("How many cigarettes did you smoke?", default=0, blank=True, null=True)
+    cigarettes = models.PositiveIntegerField("How many cigarettes did you smoke?", blank=True, null=True)
     cigarette_type = models.CharField("Type of cigarette", max_length=20, choices=CHOICES, blank=True)
     updated_at = models.DateTimeField(auto_now=True, help_text='Time when the interface was last updated')
 
@@ -116,7 +116,7 @@ class Sports(models.Model):
         ('bouldering', 'Bouldering')
     ]
 
-    exercise_times = models.PositiveIntegerField("How long did you exercise?", default=0, blank=True, null=True)
+    exercise_times = models.PositiveIntegerField("How long did you exercise?", blank=True, null=True)
     exercise_unit = models.CharField("Unit of sports", max_length=8, choices=UNIT, default='minutes', blank=True,
                                      null=True)
     exercise_type = MultiSelectField("Type of exercise", max_length=99999, choices=CHOICES, blank=True)
@@ -168,7 +168,7 @@ class AlcoholHabit(models.Model):
         ('old-fashioned', 'Old Fashioned')
     ]
 
-    alcohol_amount = models.PositiveIntegerField("Did you drink any alcohol? (amount)", default=0, blank=True,
+    alcohol_amount = models.PositiveIntegerField("Did you drink any alcohol? (amount)", blank=True,
                                                  null=True)
     alcohol_unit = models.CharField("Unit of alcohol", max_length=2, choices=UNIT, default='ml', blank=True,
                                     null=True)

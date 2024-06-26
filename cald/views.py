@@ -21,7 +21,6 @@ class CaldView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Day.objects.filter(user=self.request.user).order_by('-date')
-        print(f'Total entries: {queryset.count()}')
         return queryset
 
 
