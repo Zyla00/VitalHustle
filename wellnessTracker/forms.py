@@ -293,3 +293,7 @@ class DateRangeForm(forms.Form):
             raise forms.ValidationError('The end date cannot be earlier than the start date.')
 
         return cleaned_data
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

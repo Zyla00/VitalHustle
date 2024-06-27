@@ -3,6 +3,11 @@ from openpyxl.utils import get_column_letter
 from django.http import JsonResponse, HttpResponse
 from django.db import transaction
 from django.utils import timezone
+from django.shortcuts import render, redirect
+import pandas as pd
+from django.contrib import messages
+from decimal import Decimal
+from .forms import UploadFileForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, FormView, View
 from django.shortcuts import get_object_or_404
@@ -400,3 +405,44 @@ class ProcessDaysExportView(LoginRequiredMixin, FormView):
         }
 
         return JsonResponse({'success': False, 'errors': errors})
+
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = request.FILES['file']
+            df = pd.read_excel(file)
+
+            for index, row in df.iterrows():
+                mood_scale = MoodScale.objects.create(scale=row['mood_scale'])
+                mood_emotion = MoodEmotion.objects.create(emotions=row['mood_emotion'].split(','))
+                mood_note = MoodNote.objects.create(note=row['mood_note'])
+                sleep = Sleep.objects.create(slept_scale=Decimal(row['sleep']))
+                coffee_habit = CoffeHabit.objects.create(coffee_amount=row['coffee_amount'],
+                                                         coffee_unit=row['coffee_unit'])
+                cigarette_habit = CigaretteHabit.objects.create(cigarettes=row['cigarettes'],
+                                                                cigarette_type=row['cigarette_type'])
+                alcohol_habit = AlcoholHabit.objects.create(alcohol_amount=row['alcohol_amount'],
+                                                            alcohol_unit=row['alcohol_unit'],
+                                                            alcohol_type=row['alcohol_type'].split(','))
+                sports = Sports.objects.create(exercise_times=row['exercise_times'], exercise_unit=row['exercise_unit'],
+                                               exercise_type=row['exercise_type'].split(','))
+
+                Day.objects.create(
+                    user=request.user,
+                    mood_scale=mood_scale,
+                    mood_emotion=mood_emotion,
+                    mood_note=mood_note,
+                    sleep=sleep,
+                    coffee_habit=coffee_habit,
+                    cigarette_habit=cigarette_habit,
+                    alcohol_habit=alcohol_habit,
+                    sports=sports,
+                    date=row['date']
+                )
+            messages.success(request, 'Data uploaded successfully')
+            return redirect('view_name')  # Redirect to the view displaying the data
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})

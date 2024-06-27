@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Data</title>
+    {% load static %}
+</head>
+<body>
+<h1>Upload Excel File</h1>
+<form method="post" enctype="multipart/form-data" id="upload-form">
+    {% csrf_token %}
+    <p>
+        <label for="{{ form.file.id_for_label }}">Select file</label>
+        {{ form.file }}
+        {% if form.file.help_text %}
+            <small class="form-text text-muted">{{ form.file.help_text }}</small>
+        {% endif %}
+    </p>
+    <button type="submit" class="btn btn-apply rounded-pill shadow-none upload-btn">Upload</button>
+</form>
+</body>
+</html>
